@@ -2,7 +2,7 @@
 
 Single-screen crop, focal point, and **live multi-aspect-ratio preview** for Payload upload collections. Replaces Payload's separate crop/focal drawers with one editor that shows, in real time, how your image will look at every aspect ratio your frontend uses.
 
-> _Screenshot / GIF of the inline editor goes here._
+![edit_preview](./payload-plugin-aspect-preview.png)
 
 ## Features
 
