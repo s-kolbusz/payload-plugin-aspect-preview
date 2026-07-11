@@ -1,4 +1,4 @@
-import { FocalPointEditor, CustomUpload } from '../../../../src/exports/client.ts'
+import { FocalPointEditor, CustomUpload } from '../../../../dist/exports/client.js'
 
 export const importMap = {
   'payload-plugin-aspect-preview/client#FocalPointEditor': FocalPointEditor,

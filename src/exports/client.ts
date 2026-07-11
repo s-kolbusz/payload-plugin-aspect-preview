@@ -1,3 +1,3 @@
-export { FocalPointEditor } from '../components/FocalPointEditor'
-export { AspectRatioPreviewGrid } from '../components/AspectRatioPreviewGrid'
-export { CustomUpload } from '../components/CustomUpload'
+export { FocalPointEditor } from '../components/FocalPointEditor.js'
+export { AspectRatioPreviewGrid } from '../components/AspectRatioPreviewGrid.js'
+export { CustomUpload } from '../components/CustomUpload.js'

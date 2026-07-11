@@ -1,7 +1,7 @@
 import type { CollectionConfig, Config, Plugin } from 'payload'
 
-import { DEFAULT_ASPECT_RATIOS } from './defaults'
-import type { AspectPreviewPluginOptions } from './types'
+import { DEFAULT_ASPECT_RATIOS } from './defaults.js'
+import type { AspectPreviewPluginOptions } from './types.js'
 
 const FIELD_COMPONENT = 'payload-plugin-aspect-preview/client#FocalPointEditor'
 const UPLOAD_COMPONENT = 'payload-plugin-aspect-preview/client#CustomUpload'

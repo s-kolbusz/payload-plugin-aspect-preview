@@ -1,3 +1,4 @@
+// dev app loads the built plugin from ../dist — run `pnpm build` before `pnpm dev`.
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
@@ -5,7 +6,7 @@ import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
-import { aspectPreviewPlugin } from '../src/index'
+import { aspectPreviewPlugin } from '../dist/index.js'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
