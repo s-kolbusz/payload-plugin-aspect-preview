@@ -2,7 +2,15 @@
   "name": "payload-plugin-aspect-preview",
   "version": "0.1.0",
   "description": "Single-screen crop, focal point, and live multi-aspect-ratio preview editor for Payload upload collections.",
-  "keywords": ["payload", "payload-plugin", "payloadcms", "focal-point", "crop", "aspect-ratio", "media"],
+  "keywords": [
+    "payload",
+    "payload-plugin",
+    "payloadcms",
+    "focal-point",
+    "crop",
+    "aspect-ratio",
+    "media"
+  ],
   "license": "MIT",
   "author": "Sebastian Kolbusz <s.kolbusz@outlook.com>",
   "repository": {
@@ -37,7 +45,9 @@
       "default": "./dist/exports/types.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "pnpm clean && pnpm copyfiles && pnpm build:types && pnpm build:swc",
     "build:swc": "swc ./src -d ./dist --config-file .swcrc --strip-leading-paths --ignore \"**/*.spec.ts\"",
@@ -66,7 +76,6 @@
     "@swc/core": "^1.10.0",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
     "copyfiles": "^2.4.1",
     "next": "^16.0.0",
     "payload": "^3.85.0",
