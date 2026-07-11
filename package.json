@@ -1,6 +1,6 @@
 {
   "name": "payload-plugin-aspect-preview",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Single-screen crop, focal point, and live multi-aspect-ratio preview editor for Payload upload collections.",
   "keywords": [
     "payload",
