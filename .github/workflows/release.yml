@@ -1,0 +1,39 @@
+name: Release
+
+# Publishes to npm when a v* tag is pushed:
+#   npm version patch && git push --follow-tags
+#
+# Requires a repo secret NPM_TOKEN — an npm "Automation" access token
+# (Automation tokens bypass 2FA, which is required for CI publishing).
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  id-token: write # required for npm provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org'
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm build
+
+      - run: pnpm test
+
+      # prepublishOnly rebuilds, so publish the already-verified tree.
+      - run: npm publish --provenance --access public --ignore-scripts
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
