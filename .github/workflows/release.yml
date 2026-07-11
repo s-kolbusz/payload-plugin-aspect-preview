@@ -27,6 +27,18 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           cache: pnpm
 
+      # Skip publishing (but still validate the tag) when no token is set —
+      # e.g. releases published manually. Set the NPM_TOKEN secret to enable
+      # automated publishing on tag push.
+      - name: Detect npm token
+        run: |
+          if [ -n "${{ secrets.NPM_TOKEN }}" ]; then
+            echo "HAS_TOKEN=true" >> "$GITHUB_ENV"
+          else
+            echo "HAS_TOKEN=false" >> "$GITHUB_ENV"
+            echo "::notice::NPM_TOKEN not set — validating the tag but skipping npm publish."
+          fi
+
       - run: pnpm install --frozen-lockfile
 
       - run: pnpm build
@@ -34,6 +46,8 @@ jobs:
       - run: pnpm test
 
       # prepublishOnly rebuilds, so publish the already-verified tree.
-      - run: npm publish --provenance --access public --ignore-scripts
+      - name: Publish to npm
+        if: env.HAS_TOKEN == 'true'
+        run: npm publish --provenance --access public --ignore-scripts
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
