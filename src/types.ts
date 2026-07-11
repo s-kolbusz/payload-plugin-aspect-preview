@@ -1,3 +1,8 @@
+/**
+ * A single aspect ratio shown in the editor's live preview grid. Pass an array
+ * of these as {@link AspectPreviewPluginOptions.aspectRatios} to tailor the
+ * ratios to your frontend; see {@link DEFAULT_ASPECT_RATIOS} for the shipped set.
+ */
 export interface AspectRatioConfig {
   /** Display label, e.g. "Social Share". */
   name: string
@@ -15,6 +20,7 @@ export interface AspectRatioConfig {
   category?: string
 }
 
+/** Options for {@link aspectPreviewPlugin}. */
 export interface AspectPreviewPluginOptions {
   /** Upload collections (by slug) to enhance with the inline editor. */
   collections: string[]
@@ -24,6 +30,7 @@ export interface AspectPreviewPluginOptions {
   disabled?: boolean
 }
 
+/** A crop rectangle. `x`/`y`/`width`/`height` are in `unit` (percent or pixels). */
 export interface CropConfig {
   unit: 'px' | '%'
   x: number
@@ -32,11 +39,13 @@ export interface CropConfig {
   height: number
 }
 
+/** Focal point as percentages (0-100) of its reference image. */
 export interface FocalPointState {
   x: number
   y: number
 }
 
+/** The editor's pending edits, mirrored into Payload's upload-edits context. */
 export interface UploadEditsState {
   crop?: CropConfig
   focalPoint?: FocalPointState

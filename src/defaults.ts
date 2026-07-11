@@ -1,5 +1,9 @@
 import type { AspectRatioConfig } from './types.js'
 
+/**
+ * The aspect ratios previewed when {@link AspectPreviewPluginOptions.aspectRatios}
+ * is omitted: square, 4:3, 3:2, 16:9, 9:16, and a 1200×630 social-share target.
+ */
 export const DEFAULT_ASPECT_RATIOS: AspectRatioConfig[] = [
   { name: 'Square', ratio: '1:1', width: 1, height: 1, source: 'crop', usage: 'Avatars, thumbnails', category: 'general' },
   { name: 'Standard', ratio: '4:3', width: 4, height: 3, source: 'css', usage: 'Standard cards', category: 'general' },

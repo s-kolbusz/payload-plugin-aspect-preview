@@ -6,6 +6,31 @@ import type { AspectPreviewPluginOptions } from './types.js'
 const FIELD_COMPONENT = 'payload-plugin-aspect-preview/client#FocalPointEditor'
 const UPLOAD_COMPONENT = 'payload-plugin-aspect-preview/client#CustomUpload'
 
+/**
+ * Adds an inline focal-point + crop editor with a live aspect-ratio preview
+ * grid to Payload upload collections.
+ *
+ * For every collection listed in {@link AspectPreviewPluginOptions.collections}
+ * it appends an `aspectPreview` UI field that renders the editor and (unless
+ * {@link AspectPreviewPluginOptions.disabled}) overrides the collection's upload
+ * component to replace Payload's default crop drawer.
+ *
+ * @param options - see {@link AspectPreviewPluginOptions}.
+ * @returns a Payload {@link Plugin}.
+ *
+ * @example
+ * ```ts
+ * // payload.config.ts
+ * import { aspectPreviewPlugin } from 'payload-plugin-aspect-preview'
+ *
+ * export default buildConfig({
+ *   plugins: [
+ *     // aspectRatios defaults to DEFAULT_ASPECT_RATIOS when omitted
+ *     aspectPreviewPlugin({ collections: ['media'] }),
+ *   ],
+ * })
+ * ```
+ */
 export const aspectPreviewPlugin =
   (options: AspectPreviewPluginOptions): Plugin =>
   (config: Config): Config => {

@@ -1,11 +1,12 @@
 'use client'
 
-import { useConfig, useDocumentInfo, useForm, useUploadEdits } from '@payloadcms/ui'
+import { useConfig, useDocumentInfo, useField, useForm, useUploadEdits } from '@payloadcms/ui'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import 'react-image-crop/dist/ReactCrop.css'
 import ReactCrop, { type Crop } from 'react-image-crop'
 
 import { DEFAULT_ASPECT_RATIOS } from '../defaults'
+import { toCropRelativeFocal, toFullImageFocal } from '../focal'
 import type { AspectRatioConfig, CropConfig } from '../types'
 
 import { AspectRatioPreviewGrid } from './AspectRatioPreviewGrid'
@@ -27,16 +28,36 @@ export const FocalPointEditor: React.FC = () => {
 
   const hasUserEditedRef = useRef(false)
 
+  // The freshly-picked File lives in the shared `file` form field (set by the
+  // upload component) before the document is saved. Reading it here lets us
+  // show the editor + preview immediately on selection, saving a save-round-trip.
+  const { value: pendingFile } = useField<File | undefined>({ path: 'file' })
+  const pendingUrl = React.useMemo(
+    () =>
+      pendingFile instanceof File && pendingFile.type.startsWith('image/')
+        ? URL.createObjectURL(pendingFile)
+        : undefined,
+    [pendingFile],
+  )
+  // Revoke the object URL when it changes or the editor unmounts.
+  useEffect(() => {
+    if (!pendingUrl) return
+    return () => URL.revokeObjectURL(pendingUrl)
+  }, [pendingUrl])
+
   // Bust the browser cache when the document is re-saved so the regenerated
   // cropped image (same URL, new bytes) shows up in the preview grid.
   const rawUrl = data?.url as string | undefined
   const updatedAtTag = data?.updatedAt ? String(data.updatedAt) : undefined
   const imageUrl = React.useMemo(() => {
+    // A pending selection wins over the saved doc — it's what the user is
+    // about to save. Blob URLs take no query string, so skip cache-busting.
+    if (pendingUrl) return pendingUrl
     if (!rawUrl) return undefined
     if (!updatedAtTag) return rawUrl
     const sep = rawUrl.includes('?') ? '&' : '?'
     return `${rawUrl}${sep}v=${encodeURIComponent(updatedAtTag)}`
-  }, [rawUrl, updatedAtTag])
+  }, [pendingUrl, rawUrl, updatedAtTag])
 
   const [mode, setMode] = useState<'crop' | 'focal'>('focal')
   // Crop is undefined when none has been drawn yet. When the user enters crop
@@ -53,9 +74,19 @@ export const FocalPointEditor: React.FC = () => {
         }
       : undefined,
   )
-  const [focalPoint, setFocalPoint] = useState({
-    x: uploadEdits?.focalPoint?.x || data?.focalX || 50,
-    y: uploadEdits?.focalPoint?.y || data?.focalY || 50,
+  const [focalPoint, setFocalPoint] = useState(() => {
+    // uploadEdits stores the focal crop-relative (see the save effect below);
+    // lift it back into the full-image space the editor works in. `??` — a
+    // focal of 0 (an edge) is valid and must not fall through to the centre.
+    if (uploadEdits?.focalPoint) {
+      return uploadEdits.crop && uploadEdits.crop.unit === '%'
+        ? toFullImageFocal(uploadEdits.focalPoint, uploadEdits.crop)
+        : uploadEdits.focalPoint
+    }
+    return {
+      x: typeof data?.focalX === 'number' ? data.focalX : 50,
+      y: typeof data?.focalY === 'number' ? data.focalY : 50,
+    }
   })
   const containerRef = useRef<HTMLDivElement>(null)
   const [isDragging, setIsDragging] = useState(false)
@@ -73,7 +104,9 @@ export const FocalPointEditor: React.FC = () => {
   const docHeight = typeof data?.height === 'number' ? data.height : 0
 
   useEffect(() => {
-    if (docWidth > 0 && docHeight > 0) {
+    // For a pending selection the doc dimensions are stale/absent — always
+    // decode the picked image so crop pixel math uses the real size.
+    if (!pendingUrl && docWidth > 0 && docHeight > 0) {
       queueMicrotask(() => setNaturalSize({ width: docWidth, height: docHeight }))
       return
     }
@@ -83,7 +116,7 @@ export const FocalPointEditor: React.FC = () => {
       setNaturalSize({ width: img.naturalWidth, height: img.naturalHeight })
     }
     img.src = imageUrl
-  }, [imageUrl, docWidth, docHeight])
+  }, [imageUrl, pendingUrl, docWidth, docHeight])
 
   const [prevUpdatedAtTag, setPrevUpdatedAtTag] = useState(updatedAtTag)
 
@@ -152,6 +185,11 @@ export const FocalPointEditor: React.FC = () => {
             naturalSize.height - topPx,
           ),
         )
+        // Payload interprets the saved focal point relative to the CROPPED
+        // image (it swaps the base image for the cropped bytes before sizing),
+        // so re-express our full-image focal within the crop region. clampFocal-
+        // ToCrop already keeps the focal inside the crop, so this stays 0-100.
+        const cropRelativeFocal = toCropRelativeFocal(focalPoint, crop)
         updateUploadEdits({
           crop: {
             unit: '%',
@@ -160,7 +198,7 @@ export const FocalPointEditor: React.FC = () => {
             width: crop.width,
             height: crop.height,
           },
-          focalPoint,
+          focalPoint: cropRelativeFocal,
           heightInPixels,
           widthInPixels,
         })

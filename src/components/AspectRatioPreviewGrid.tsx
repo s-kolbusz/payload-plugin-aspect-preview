@@ -59,9 +59,11 @@ function resolveCropPixels(crop: CropConfig, imgW: number, imgH: number) {
   return { x: crop.x, y: crop.y, w: crop.width, h: crop.height }
 }
 
-// Editor stores focalX/focalY as percentages of the FULL image.
-// Convert to percentages within the crop region.
-function toCropRelativeFocal(
+// Editor passes focalX/focalY as percentages of the FULL image; convert to
+// percentages within the crop region. Pixel-based sibling of focal.ts'
+// `toCropRelativeFocal` — identical result, but expressed in pixels here
+// because this component already resolves the crop to pixels.
+function focalWithinCropPixels(
   focalX: number,
   focalY: number,
   crop: { x: number; y: number; w: number; h: number },
@@ -96,7 +98,7 @@ function computeCroppedBackgroundStyle(
   const scale = Math.max(frameW / crop.w, frameH / crop.h)
 
   // Focal point inside the crop region, expressed as %
-  const relFocal = toCropRelativeFocal(focalX, focalY, crop, imgW, imgH)
+  const relFocal = focalWithinCropPixels(focalX, focalY, crop, imgW, imgH)
 
   // Where the crop region's top-left lands in the frame, per object-position math
   const cropDisplayW = crop.w * scale
