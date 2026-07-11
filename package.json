@@ -27,7 +27,7 @@
   "files": ["dist"],
   "scripts": {
     "build": "pnpm clean && pnpm copyfiles && pnpm build:types && pnpm build:swc",
-    "build:swc": "swc ./src -d ./dist --config-file .swcrc --strip-leading-paths",
+    "build:swc": "swc ./src -d ./dist --config-file .swcrc --strip-leading-paths --ignore \"**/*.spec.ts\"",
     "build:types": "tsc --emitDeclarationOnly --outDir dist",
     "clean": "rimraf dist *.tsbuildinfo",
     "copyfiles": "copyfiles -u 1 \"src/**/*.{scss,css}\" dist/",
