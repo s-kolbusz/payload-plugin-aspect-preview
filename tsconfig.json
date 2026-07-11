@@ -16,5 +16,5 @@
     "verbatimModuleSyntax": false
   },
   "include": ["src"],
-  "exclude": ["dist", "node_modules", "dev"]
+  "exclude": ["dist", "node_modules", "dev", "**/*.spec.ts"]
 }
