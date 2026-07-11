@@ -4,6 +4,19 @@
   "description": "Single-screen crop, focal point, and live multi-aspect-ratio preview editor for Payload upload collections.",
   "keywords": ["payload", "payload-plugin", "payloadcms", "focal-point", "crop", "aspect-ratio", "media"],
   "license": "MIT",
+  "author": "Sebastian Kolbusz <s.kolbusz@outlook.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/s-kolbusz/payload-plugin-aspect-preview.git"
+  },
+  "homepage": "https://github.com/s-kolbusz/payload-plugin-aspect-preview#readme",
+  "bugs": "https://github.com/s-kolbusz/payload-plugin-aspect-preview/issues",
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
