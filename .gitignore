@@ -3,4 +3,7 @@ dist
 *.tsbuildinfo
 dev/.env
 dev/.next
+dev/media
+*.pid
+*.log
 .DS_Store
