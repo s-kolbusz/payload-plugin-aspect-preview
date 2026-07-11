@@ -1,0 +1,69 @@
+{
+  "name": "payload-plugin-aspect-preview",
+  "version": "0.1.0",
+  "description": "Single-screen crop, focal point, and live multi-aspect-ratio preview editor for Payload upload collections.",
+  "keywords": ["payload", "payload-plugin", "payloadcms", "focal-point", "crop", "aspect-ratio", "media"],
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./client": {
+      "import": "./dist/exports/client.js",
+      "types": "./dist/exports/client.d.ts",
+      "default": "./dist/exports/client.js"
+    },
+    "./types": {
+      "import": "./dist/exports/types.js",
+      "types": "./dist/exports/types.d.ts",
+      "default": "./dist/exports/types.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "pnpm clean && pnpm copyfiles && pnpm build:types && pnpm build:swc",
+    "build:swc": "swc ./src -d ./dist --config-file .swcrc --strip-leading-paths",
+    "build:types": "tsc --emitDeclarationOnly --outDir dist",
+    "clean": "rimraf dist *.tsbuildinfo",
+    "copyfiles": "copyfiles -u 1 \"src/**/*.{scss,css}\" dist/",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "dev": "next dev dev --turbo",
+    "prepublishOnly": "pnpm build"
+  },
+  "dependencies": {
+    "react-image-crop": "^11.1.2"
+  },
+  "peerDependencies": {
+    "@payloadcms/ui": "^3.85.0",
+    "payload": "^3.85.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@payloadcms/db-mongodb": "^3.85.0",
+    "@payloadcms/next": "^3.85.0",
+    "@payloadcms/richtext-lexical": "^3.85.0",
+    "@payloadcms/ui": "^3.85.0",
+    "@swc/cli": "^0.5.0",
+    "@swc/core": "^1.10.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "copyfiles": "^2.4.1",
+    "cross-env": "^7.0.3",
+    "next": "^16.0.0",
+    "payload": "^3.85.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "rimraf": "^6.0.0",
+    "sharp": "0.34.2",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  }
+}
