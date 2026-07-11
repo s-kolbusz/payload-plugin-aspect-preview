@@ -1,0 +1,556 @@
+⚠ Port 3000 is in use by process 12518, using available port 3001 instead.
+▲ Next.js 16.2.10 (Turbopack)
+- Local:         http://localhost:3001
+- Network:       http://192.168.1.35:3001
+- Environments: .env
+✓ Ready in 311ms
+- Experiments (use with caution):
+  ⨯ turbopackServerFastRefresh
+
+⨯ ./dev/app/(payload)/admin/importMap.js:1:1
+Module not found: Can't resolve '../../../../src/exports/client.js'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mFocalPointEditor[0m, [33mCustomUpload[0m } [36mfrom[0m [32m'../../../../src/exports/client.js'[0m
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mconst[0m importMap = {
+  [90m4 |[0m   [32m'payload-plugin-aspect-preview/client#FocalPointEditor'[0m: [33mFocalPointEditor[0m,
+
+
+
+Import traces:
+  #1 [Server Component]:
+    ./dev/app/(payload)/admin/importMap.js
+    ./dev/app/(payload)/admin/[[...segments]]/not-found.tsx
+
+  #2 [Server Component]:
+    ./dev/app/(payload)/admin/importMap.js
+    ./dev/app/(payload)/admin/[[...segments]]/page.tsx
+
+  #3 [Server Component]:
+    ./dev/app/(payload)/admin/importMap.js
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./dev/payload.config.ts:8:1
+Module not found: Can't resolve '../src/index.js'
+  [90m 6 |[0m [36mimport[0m { fileURLToPath } [36mfrom[0m [32m'url'[0m
+  [90m 7 |[0m
+[31m[1m>[0m [90m 8 |[0m [36mimport[0m { aspectPreviewPlugin } [36mfrom[0m [32m'../src/index.js'[0m
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m 9 |[0m
+  [90m10 |[0m [36mconst[0m filename = fileURLToPath([36mimport[0m.meta.url)
+  [90m11 |[0m [36mconst[0m dirname = path.dirname(filename)
+
+
+
+Import traces:
+  #1 [Server Component]:
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/admin/[[...segments]]/not-found.tsx
+
+  #2 [Server Component]:
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/admin/[[...segments]]/page.tsx
+
+  #3 [Server Component]:
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ GET /admin 500 in 3.0s (next.js: 2.9s, application-code: 46ms)
+⨯ ./src/exports/client.ts:2:1
+Module not found: Can't resolve '../components/AspectRatioPreviewGrid.js'
+  [90m1 |[0m [36mexport[0m { [33mFocalPointEditor[0m } [36mfrom[0m [32m'../components/FocalPointEditor.js'[0m
+[31m[1m>[0m [90m2 |[0m [36mexport[0m { [33mAspectRatioPreviewGrid[0m } [36mfrom[0m [32m'../components/AspectRatioPreviewGrid.js'[0m
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m3 |[0m [36mexport[0m { [33mCustomUpload[0m } [36mfrom[0m [32m'../components/CustomUpload.js'[0m
+  [90m4 |[0m
+
+
+
+Import trace:
+  Server Component:
+    ./src/exports/client.ts
+    ./dev/app/(payload)/admin/importMap.js
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/exports/client.ts:2:1
+Module not found: Can't resolve '../components/AspectRatioPreviewGrid.js'
+  [90m1 |[0m [36mexport[0m { [33mFocalPointEditor[0m } [36mfrom[0m [32m'../components/FocalPointEditor.js'[0m
+[31m[1m>[0m [90m2 |[0m [36mexport[0m { [33mAspectRatioPreviewGrid[0m } [36mfrom[0m [32m'../components/AspectRatioPreviewGrid.js'[0m
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m3 |[0m [36mexport[0m { [33mCustomUpload[0m } [36mfrom[0m [32m'../components/CustomUpload.js'[0m
+  [90m4 |[0m
+
+
+
+Import trace:
+  Server Component:
+    ./src/exports/client.ts
+    ./dev/app/(payload)/admin/importMap.js
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/exports/client.ts:3:1
+Module not found: Can't resolve '../components/CustomUpload.js'
+  [90m1 |[0m [36mexport[0m { [33mFocalPointEditor[0m } [36mfrom[0m [32m'../components/FocalPointEditor.js'[0m
+  [90m2 |[0m [36mexport[0m { [33mAspectRatioPreviewGrid[0m } [36mfrom[0m [32m'../components/AspectRatioPreviewGrid.js'[0m
+[31m[1m>[0m [90m3 |[0m [36mexport[0m { [33mCustomUpload[0m } [36mfrom[0m [32m'../components/CustomUpload.js'[0m
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m4 |[0m
+
+
+
+Import trace:
+  Server Component:
+    ./src/exports/client.ts
+    ./dev/app/(payload)/admin/importMap.js
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/exports/client.ts:3:1
+Module not found: Can't resolve '../components/CustomUpload.js'
+  [90m1 |[0m [36mexport[0m { [33mFocalPointEditor[0m } [36mfrom[0m [32m'../components/FocalPointEditor.js'[0m
+  [90m2 |[0m [36mexport[0m { [33mAspectRatioPreviewGrid[0m } [36mfrom[0m [32m'../components/AspectRatioPreviewGrid.js'[0m
+[31m[1m>[0m [90m3 |[0m [36mexport[0m { [33mCustomUpload[0m } [36mfrom[0m [32m'../components/CustomUpload.js'[0m
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m4 |[0m
+
+
+
+Import trace:
+  Server Component:
+    ./src/exports/client.ts
+    ./dev/app/(payload)/admin/importMap.js
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/exports/client.ts:1:1
+Module not found: Can't resolve '../components/FocalPointEditor.js'
+[31m[1m>[0m [90m1 |[0m [36mexport[0m { [33mFocalPointEditor[0m } [36mfrom[0m [32m'../components/FocalPointEditor.js'[0m
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m [36mexport[0m { [33mAspectRatioPreviewGrid[0m } [36mfrom[0m [32m'../components/AspectRatioPreviewGrid.js'[0m
+  [90m3 |[0m [36mexport[0m { [33mCustomUpload[0m } [36mfrom[0m [32m'../components/CustomUpload.js'[0m
+  [90m4 |[0m
+
+
+
+Import trace:
+  Server Component:
+    ./src/exports/client.ts
+    ./dev/app/(payload)/admin/importMap.js
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/exports/client.ts:1:1
+Module not found: Can't resolve '../components/FocalPointEditor.js'
+[31m[1m>[0m [90m1 |[0m [36mexport[0m { [33mFocalPointEditor[0m } [36mfrom[0m [32m'../components/FocalPointEditor.js'[0m
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m [36mexport[0m { [33mAspectRatioPreviewGrid[0m } [36mfrom[0m [32m'../components/AspectRatioPreviewGrid.js'[0m
+  [90m3 |[0m [36mexport[0m { [33mCustomUpload[0m } [36mfrom[0m [32m'../components/CustomUpload.js'[0m
+  [90m4 |[0m
+
+
+
+Import trace:
+  Server Component:
+    ./src/exports/client.ts
+    ./dev/app/(payload)/admin/importMap.js
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./dev/payload.config.ts:8:1
+Module not found: Can't resolve '../src/index.js'
+  [90m 6 |[0m [36mimport[0m { fileURLToPath } [36mfrom[0m [32m'url'[0m
+  [90m 7 |[0m
+[31m[1m>[0m [90m 8 |[0m [36mimport[0m { aspectPreviewPlugin } [36mfrom[0m [32m'../src/index.js'[0m
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m 9 |[0m
+  [90m10 |[0m [36mconst[0m filename = fileURLToPath([36mimport[0m.meta.url)
+  [90m11 |[0m [36mconst[0m dirname = path.dirname(filename)
+
+
+
+Import traces:
+  #1 [Server Component]:
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/admin/[[...segments]]/not-found.tsx
+
+  #2 [Server Component]:
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/admin/[[...segments]]/page.tsx
+
+  #3 [Server Component]:
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./dev/payload.config.ts:8:1
+Module not found: Can't resolve '../src/index.js'
+  [90m 6 |[0m [36mimport[0m { fileURLToPath } [36mfrom[0m [32m'url'[0m
+  [90m 7 |[0m
+[31m[1m>[0m [90m 8 |[0m [36mimport[0m { aspectPreviewPlugin } [36mfrom[0m [32m'../src/index.js'[0m
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m 9 |[0m
+  [90m10 |[0m [36mconst[0m filename = fileURLToPath([36mimport[0m.meta.url)
+  [90m11 |[0m [36mconst[0m dirname = path.dirname(filename)
+
+
+
+Import traces:
+  #1 [Server Component]:
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/admin/[[...segments]]/not-found.tsx
+
+  #2 [Server Component]:
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/admin/[[...segments]]/page.tsx
+
+  #3 [Server Component]:
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/exports/client.ts:2:1
+Module not found: Can't resolve '../components/AspectRatioPreviewGrid.js'
+  [90m1 |[0m [36mexport[0m { [33mFocalPointEditor[0m } [36mfrom[0m [32m'../components/FocalPointEditor.js'[0m
+[31m[1m>[0m [90m2 |[0m [36mexport[0m { [33mAspectRatioPreviewGrid[0m } [36mfrom[0m [32m'../components/AspectRatioPreviewGrid.js'[0m
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m3 |[0m [36mexport[0m { [33mCustomUpload[0m } [36mfrom[0m [32m'../components/CustomUpload.js'[0m
+  [90m4 |[0m
+
+
+
+Import trace:
+  Server Component:
+    ./src/exports/client.ts
+    ./dev/app/(payload)/admin/importMap.js
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/exports/client.ts:3:1
+Module not found: Can't resolve '../components/CustomUpload.js'
+  [90m1 |[0m [36mexport[0m { [33mFocalPointEditor[0m } [36mfrom[0m [32m'../components/FocalPointEditor.js'[0m
+  [90m2 |[0m [36mexport[0m { [33mAspectRatioPreviewGrid[0m } [36mfrom[0m [32m'../components/AspectRatioPreviewGrid.js'[0m
+[31m[1m>[0m [90m3 |[0m [36mexport[0m { [33mCustomUpload[0m } [36mfrom[0m [32m'../components/CustomUpload.js'[0m
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m4 |[0m
+
+
+
+Import trace:
+  Server Component:
+    ./src/exports/client.ts
+    ./dev/app/(payload)/admin/importMap.js
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/exports/client.ts:1:1
+Module not found: Can't resolve '../components/FocalPointEditor.js'
+[31m[1m>[0m [90m1 |[0m [36mexport[0m { [33mFocalPointEditor[0m } [36mfrom[0m [32m'../components/FocalPointEditor.js'[0m
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m [36mexport[0m { [33mAspectRatioPreviewGrid[0m } [36mfrom[0m [32m'../components/AspectRatioPreviewGrid.js'[0m
+  [90m3 |[0m [36mexport[0m { [33mCustomUpload[0m } [36mfrom[0m [32m'../components/CustomUpload.js'[0m
+  [90m4 |[0m
+
+
+
+Import trace:
+  Server Component:
+    ./src/exports/client.ts
+    ./dev/app/(payload)/admin/importMap.js
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./dev/payload.config.ts:8:1
+Module not found: Can't resolve '../src/index.js'
+  [90m 6 |[0m [36mimport[0m { fileURLToPath } [36mfrom[0m [32m'url'[0m
+  [90m 7 |[0m
+[31m[1m>[0m [90m 8 |[0m [36mimport[0m { aspectPreviewPlugin } [36mfrom[0m [32m'../src/index.js'[0m
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m 9 |[0m
+  [90m10 |[0m [36mconst[0m filename = fileURLToPath([36mimport[0m.meta.url)
+  [90m11 |[0m [36mconst[0m dirname = path.dirname(filename)
+
+
+
+Import traces:
+  #1 [Server Component]:
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/admin/[[...segments]]/not-found.tsx
+
+  #2 [Server Component]:
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/admin/[[...segments]]/page.tsx
+
+  #3 [Server Component]:
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ GET /admin 500 in 62ms (next.js: 57ms, application-code: 5ms)
+⨯ ./dev/payload.config.ts:8:1
+Module not found: Can't resolve '../src/index.js'
+  [90m 6 |[0m [36mimport[0m { fileURLToPath } [36mfrom[0m [32m'url'[0m
+  [90m 7 |[0m
+[31m[1m>[0m [90m 8 |[0m [36mimport[0m { aspectPreviewPlugin } [36mfrom[0m [32m'../src/index.js'[0m
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m 9 |[0m
+  [90m10 |[0m [36mconst[0m filename = fileURLToPath([36mimport[0m.meta.url)
+  [90m11 |[0m [36mconst[0m dirname = path.dirname(filename)
+
+
+
+Import traces:
+  #1 [Server Component]:
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/admin/[[...segments]]/not-found.tsx
+
+  #2 [Server Component]:
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/admin/[[...segments]]/page.tsx
+
+  #3 [Server Component]:
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./dev/payload.config.ts:8:1
+Module not found: Can't resolve '../src/index.js'
+  [90m 6 |[0m [36mimport[0m { fileURLToPath } [36mfrom[0m [32m'url'[0m
+  [90m 7 |[0m
+[31m[1m>[0m [90m 8 |[0m [36mimport[0m { aspectPreviewPlugin } [36mfrom[0m [32m'../src/index.js'[0m
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m 9 |[0m
+  [90m10 |[0m [36mconst[0m filename = fileURLToPath([36mimport[0m.meta.url)
+  [90m11 |[0m [36mconst[0m dirname = path.dirname(filename)
+
+
+
+Import traces:
+  #1 [Server Component]:
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/admin/[[...segments]]/not-found.tsx
+
+  #2 [Server Component]:
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/admin/[[...segments]]/page.tsx
+
+  #3 [Server Component]:
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./dev/payload.config.ts:8:1
+Module not found: Can't resolve '../src/index.js'
+  [90m 6 |[0m [36mimport[0m { fileURLToPath } [36mfrom[0m [32m'url'[0m
+  [90m 7 |[0m
+[31m[1m>[0m [90m 8 |[0m [36mimport[0m { aspectPreviewPlugin } [36mfrom[0m [32m'../src/index.js'[0m
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m 9 |[0m
+  [90m10 |[0m [36mconst[0m filename = fileURLToPath([36mimport[0m.meta.url)
+  [90m11 |[0m [36mconst[0m dirname = path.dirname(filename)
+
+
+
+Import traces:
+  #1 [Server Component]:
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/admin/[[...segments]]/not-found.tsx
+
+  #2 [Server Component]:
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/admin/[[...segments]]/page.tsx
+
+  #3 [Server Component]:
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ GET /admin 500 in 208ms (next.js: 204ms, application-code: 4ms)
+⨯ ./src/index.ts:2:1
+Module not found: Can't resolve './defaults.js'
+  [90m1 |[0m [36mexport[0m { aspectPreviewPlugin } [36mfrom[0m [32m'./plugin.js'[0m
+[31m[1m>[0m [90m2 |[0m [36mexport[0m { [33mDEFAULT_ASPECT_RATIOS[0m } [36mfrom[0m [32m'./defaults.js'[0m
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m3 |[0m [36mexport[0m [36mtype[0m {
+  [90m4 |[0m   [33mAspectPreviewPluginOptions[0m,
+  [90m5 |[0m   [33mAspectRatioConfig[0m,
+
+
+
+Import trace:
+  Server Component:
+    ./src/index.ts
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/index.ts:2:1
+Module not found: Can't resolve './defaults.js'
+  [90m1 |[0m [36mexport[0m { aspectPreviewPlugin } [36mfrom[0m [32m'./plugin.js'[0m
+[31m[1m>[0m [90m2 |[0m [36mexport[0m { [33mDEFAULT_ASPECT_RATIOS[0m } [36mfrom[0m [32m'./defaults.js'[0m
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m3 |[0m [36mexport[0m [36mtype[0m {
+  [90m4 |[0m   [33mAspectPreviewPluginOptions[0m,
+  [90m5 |[0m   [33mAspectRatioConfig[0m,
+
+
+
+Import trace:
+  Server Component:
+    ./src/index.ts
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/index.ts:1:1
+Module not found: Can't resolve './plugin.js'
+[31m[1m>[0m [90m1 |[0m [36mexport[0m { aspectPreviewPlugin } [36mfrom[0m [32m'./plugin.js'[0m
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m [36mexport[0m { [33mDEFAULT_ASPECT_RATIOS[0m } [36mfrom[0m [32m'./defaults.js'[0m
+  [90m3 |[0m [36mexport[0m [36mtype[0m {
+  [90m4 |[0m   [33mAspectPreviewPluginOptions[0m,
+
+
+
+Import trace:
+  Server Component:
+    ./src/index.ts
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/index.ts:1:1
+Module not found: Can't resolve './plugin.js'
+[31m[1m>[0m [90m1 |[0m [36mexport[0m { aspectPreviewPlugin } [36mfrom[0m [32m'./plugin.js'[0m
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m [36mexport[0m { [33mDEFAULT_ASPECT_RATIOS[0m } [36mfrom[0m [32m'./defaults.js'[0m
+  [90m3 |[0m [36mexport[0m [36mtype[0m {
+  [90m4 |[0m   [33mAspectPreviewPluginOptions[0m,
+
+
+
+Import trace:
+  Server Component:
+    ./src/index.ts
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/plugin.ts:3:1
+Module not found: Can't resolve './defaults.js'
+  [90m1 |[0m [36mimport[0m [36mtype[0m { [33mCollectionConfig[0m, [33mConfig[0m, [33mPlugin[0m } [36mfrom[0m [32m'payload'[0m
+  [90m2 |[0m
+[31m[1m>[0m [90m3 |[0m [36mimport[0m { [33mDEFAULT_ASPECT_RATIOS[0m } [36mfrom[0m [32m'./defaults.js'[0m
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m4 |[0m [36mimport[0m [36mtype[0m { [33mAspectPreviewPluginOptions[0m } [36mfrom[0m [32m'./types.js'[0m
+  [90m5 |[0m
+  [90m6 |[0m [36mconst[0m [33mFIELD_COMPONENT[0m = [32m'payload-plugin-aspect-preview/client#FocalPointEditor'[0m
+
+
+
+Import trace:
+  Server Component:
+    ./src/plugin.ts
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/plugin.ts:3:1
+Module not found: Can't resolve './defaults.js'
+  [90m1 |[0m [36mimport[0m [36mtype[0m { [33mCollectionConfig[0m, [33mConfig[0m, [33mPlugin[0m } [36mfrom[0m [32m'payload'[0m
+  [90m2 |[0m
+[31m[1m>[0m [90m3 |[0m [36mimport[0m { [33mDEFAULT_ASPECT_RATIOS[0m } [36mfrom[0m [32m'./defaults.js'[0m
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m4 |[0m [36mimport[0m [36mtype[0m { [33mAspectPreviewPluginOptions[0m } [36mfrom[0m [32m'./types.js'[0m
+  [90m5 |[0m
+  [90m6 |[0m [36mconst[0m [33mFIELD_COMPONENT[0m = [32m'payload-plugin-aspect-preview/client#FocalPointEditor'[0m
+
+
+
+Import trace:
+  Server Component:
+    ./src/plugin.ts
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/plugin.ts:3:1
+Module not found: Can't resolve './defaults.js'
+  [90m1 |[0m [36mimport[0m [36mtype[0m { [33mCollectionConfig[0m, [33mConfig[0m, [33mPlugin[0m } [36mfrom[0m [32m'payload'[0m
+  [90m2 |[0m
+[31m[1m>[0m [90m3 |[0m [36mimport[0m { [33mDEFAULT_ASPECT_RATIOS[0m } [36mfrom[0m [32m'./defaults.js'[0m
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m4 |[0m [36mimport[0m [36mtype[0m { [33mAspectPreviewPluginOptions[0m } [36mfrom[0m [32m'./types.js'[0m
+  [90m5 |[0m
+  [90m6 |[0m [36mconst[0m [33mFIELD_COMPONENT[0m = [32m'payload-plugin-aspect-preview/client#FocalPointEditor'[0m
+
+
+
+Import trace:
+  Server Component:
+    ./src/plugin.ts
+    ./dev/payload.config.ts
+    ./dev/app/(payload)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ GET /admin 500 in 23ms (next.js: 19ms, application-code: 4ms)
+✓ Compiled in 65ms
+[21:36:48] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+[21:36:48] [33mWARN[39m: [36mImage resizing is enabled for one or more collections, but sharp not installed. Please install 'sharp' and pass into the config.[39m
+ GET /admin 200 in 2.1s (next.js: 1115ms, application-code: 1034ms)
+ HEAD /admin 200 in 53ms (next.js: 6ms, application-code: 46ms)
