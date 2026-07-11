@@ -7,3 +7,5 @@ dev/media
 *.pid
 *.log
 .DS_Store
+dev/next-env.d.ts
+dev/payload-types.ts

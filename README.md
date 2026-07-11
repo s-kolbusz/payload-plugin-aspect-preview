@@ -1,5 +1,8 @@
 # payload-plugin-aspect-preview
 
+[![npm version](https://img.shields.io/npm/v/payload-plugin-aspect-preview.svg)](https://www.npmjs.com/package/payload-plugin-aspect-preview)
+[![license](https://img.shields.io/npm/l/payload-plugin-aspect-preview.svg)](./LICENSE.md)
+
 Single-screen crop, focal point, and **live multi-aspect-ratio preview** for Payload upload collections. Replaces Payload's separate crop/focal drawers with one editor that shows, in real time, how your image will look at every aspect ratio your frontend uses.
 
 ![edit_preview](./payload-plugin-aspect-preview.png)
