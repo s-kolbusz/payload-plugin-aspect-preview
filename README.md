@@ -1,6 +1,6 @@
 # payload-plugin-aspect-preview
 
-Inline image crop and focal-point editor for Payload CMS with live preview across multiple aspect ratios.
+Single-screen crop, focal point, and **live multi-aspect-ratio preview** for Payload upload collections. Replaces Payload's separate crop/focal drawers with one editor that shows, in real time, how your image will look at every aspect ratio your frontend uses.
 
 > _Screenshot / GIF of the inline editor goes here._
 
@@ -16,8 +16,7 @@ Inline image crop and focal-point editor for Payload CMS with live preview acros
 - Payload `^3.85.0`
 - React `^19`
 
-> [!IMPORTANT]
-> This plugin uses internal Payload UI components (`@payloadcms/ui`). Ensure your Payload version matches the peer dependency for best compatibility; breaking changes in internal APIs may require updates to this plugin's client components.
+> **Compatibility note:** the replacement upload field builds on `@payloadcms/ui` internals (`FileDetails`, `Dropzone`, `PreviewSizes`, …). These are not a stable public API, so a Payload minor upgrade may occasionally require a plugin update. Pin your Payload version and test after upgrades.
 
 ## Installation
 
