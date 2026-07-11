@@ -474,7 +474,6 @@ export const FocalPointEditor: React.FC = () => {
                    *
                   **/
                 }
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={imageUrl}
                   alt="Edit"

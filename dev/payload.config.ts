@@ -26,6 +26,7 @@ export default buildConfig({
       fields: [{ name: 'alt', type: 'text' }],
       upload: {
         staticDir: path.resolve(dirname, 'media'),
+        focalPoint: true,
         imageSizes: [
           {
             name: 'thumbnail',
@@ -52,6 +53,7 @@ export default buildConfig({
     url: process.env.DATABASE_URI ?? 'mongodb://127.0.0.1/aspect-preview-dev',
   }),
   editor: lexicalEditor(),
+  sharp,
   secret: process.env.PAYLOAD_SECRET ?? 'dev-secret-change-me',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
