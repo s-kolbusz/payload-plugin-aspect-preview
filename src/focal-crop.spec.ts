@@ -58,4 +58,13 @@ describe('focal ↔ crop-relative', () => {
     expect(saved.x).toBeCloseTo(0, 6)
     expect(saved.y).toBeCloseTo(0, 6)
   })
+
+  it('crop-relative centre renders at the crop centre in full-image space', () => {
+    // The editor stores focal crop-relative; the crosshair renders full-image.
+    // Centre of a right-half crop (x=50,w=50) must land at full-image x=75.
+    const rightHalf = { x: 50, y: 0, width: 50, height: 100 }
+    const full = toFullImageFocal({ x: 50, y: 50 }, rightHalf)
+    expect(full.x).toBeCloseTo(75, 6)
+    expect(full.y).toBeCloseTo(50, 6)
+  })
 })

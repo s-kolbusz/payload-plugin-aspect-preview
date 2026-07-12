@@ -50,6 +50,9 @@ export const aspectPreviewPlugin =
               name: 'aspectPreview',
               type: 'ui',
               admin: {
+                // It's an edit-view editor, not data — keep it out of the
+                // list view's columns.
+                disableListColumn: true,
                 components: {
                   Field: FIELD_COMPONENT,
                 },

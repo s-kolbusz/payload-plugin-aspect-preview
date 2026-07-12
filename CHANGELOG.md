@@ -4,6 +4,24 @@ All notable changes to this project are documented in this file. The format is
 based on [Keep a Changelog](https://keepachangelog.com/), and this project
 adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.2.1] - 2026-07-12
+
+### Fixed
+
+- **Saving an uploaded, cropped and focal-adjusted image no longer crashes with
+  "Maximum update depth exceeded".** The re-sync-after-save effect drove its
+  run-once guard through state while also writing to the upload-edits context it
+  depended on, so each save re-entered the effect indefinitely. The guard is now
+  a ref that flips synchronously, breaking the loop.
+- **The focal point is now measured against the crop region in the editor UI,
+  not just on save.** Focal state is held in crop-relative coordinates (0–100
+  inside the active crop) and converted to full-image space only when placing
+  the crosshair or feeding the preview grid. Previously the numeric X/Y inputs
+  and the on-image crosshair disagreed whenever a crop was active.
+- Removed the stray `Aspect Preview` column from the upload collection's list
+  view — the `aspectPreview` UI field is an edit-view editor, not list data
+  (`disableListColumn: true`).
+
 ## [0.2.0] - 2026-07-12
 
 ### Added

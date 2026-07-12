@@ -74,15 +74,14 @@ export const FocalPointEditor: React.FC = () => {
         }
       : undefined,
   )
+  // Focal point is stored relative to the active crop region: a 0-100 position
+  // inside the crop, or inside the whole image when there is no crop. This is
+  // the same space Payload persists (it bakes the crop into the base image and
+  // reads focalX/focalY as percentages of the cropped result), so uploadEdits
+  // and data.focalX/Y are already in this space — no conversion on load.
+  // `typeof` (not `||`) so a valid edge focal of 0 doesn't fall through to 50.
   const [focalPoint, setFocalPoint] = useState(() => {
-    // uploadEdits stores the focal crop-relative (see the save effect below);
-    // lift it back into the full-image space the editor works in. `??` — a
-    // focal of 0 (an edge) is valid and must not fall through to the centre.
-    if (uploadEdits?.focalPoint) {
-      return uploadEdits.crop && uploadEdits.crop.unit === '%'
-        ? toFullImageFocal(uploadEdits.focalPoint, uploadEdits.crop)
-        : uploadEdits.focalPoint
-    }
+    if (uploadEdits?.focalPoint) return uploadEdits.focalPoint
     return {
       x: typeof data?.focalX === 'number' ? data.focalX : 50,
       y: typeof data?.focalY === 'number' ? data.focalY : 50,
@@ -118,45 +117,50 @@ export const FocalPointEditor: React.FC = () => {
     img.src = imageUrl
   }, [imageUrl, pendingUrl, docWidth, docHeight])
 
-  const [prevUpdatedAtTag, setPrevUpdatedAtTag] = useState(updatedAtTag)
-
-  // Re-sync local state from the saved document each time `updatedAt` changes.
+  // Re-sync local state from the saved document once per save. The guard is a
+  // ref (not state) so it flips synchronously — the effect cannot re-enter when
+  // the updateUploadEdits call below changes the upload-edits context. Driving
+  // the guard through state (and listing uploadEdits in the deps) is what
+  // previously re-entered on every context change and exceeded React's update
+  // depth on save.
+  const lastSyncedTagRef = useRef(updatedAtTag)
   useEffect(() => {
-    if (updatedAtTag && updatedAtTag !== prevUpdatedAtTag) {
-      const nextFocal = {
-        x: typeof data?.focalX === 'number' ? data.focalX : 50,
-        y: typeof data?.focalY === 'number' ? data.focalY : 50,
-      }
-      queueMicrotask(() => {
-        setPrevUpdatedAtTag(updatedAtTag)
-        hasUserEditedRef.current = false
-        setFocalPoint(nextFocal)
-        setCrop(undefined)
-      })
-      if (uploadEdits?.crop || uploadEdits?.focalPoint) {
-        updateUploadEdits({
-          crop: undefined,
-          focalPoint: nextFocal,
-          heightInPixels: undefined,
-          widthInPixels: undefined,
-        })
-      }
+    if (!updatedAtTag || updatedAtTag === lastSyncedTagRef.current) return
+    lastSyncedTagRef.current = updatedAtTag
+    hasUserEditedRef.current = false
+    const nextFocal = {
+      x: typeof data?.focalX === 'number' ? data.focalX : 50,
+      y: typeof data?.focalY === 'number' ? data.focalY : 50,
     }
-  }, [
-    updatedAtTag,
-    prevUpdatedAtTag,
-    data?.focalX,
-    data?.focalY,
-    uploadEdits?.crop,
-    uploadEdits?.focalPoint,
-    updateUploadEdits
-  ])
+    setFocalPoint(nextFocal)
+    // The crop is now baked into the saved image, so there is no pending crop
+    // and the focal is relative to the whole (already-cropped) image again.
+    setCrop(undefined)
+    updateUploadEdits({
+      crop: undefined,
+      focalPoint: nextFocal,
+      heightInPixels: undefined,
+      widthInPixels: undefined,
+    })
+  }, [updatedAtTag, data?.focalX, data?.focalY, updateUploadEdits])
 
   const hasRealCrop =
     !!crop &&
     crop.width > 0 &&
     crop.height > 0 &&
     (crop.width !== 100 || crop.height !== 100 || crop.x !== 0 || crop.y !== 0)
+
+  // The rectangle the focal point is measured against: the crop when one exists
+  // (in %), otherwise the whole image. Focal state is always a 0-100 position
+  // inside this rectangle; converting to/from full-image space happens only at
+  // the pointer and rendering boundaries.
+  const cropRect = React.useMemo(
+    () =>
+      hasRealCrop && crop && crop.unit === '%'
+        ? { x: crop.x, y: crop.y, width: crop.width, height: crop.height }
+        : { x: 0, y: 0, width: 100, height: 100 },
+    [hasRealCrop, crop],
+  )
 
   // Auto-save to uploadEdits whenever state changes
   useEffect(() => {
@@ -185,11 +189,6 @@ export const FocalPointEditor: React.FC = () => {
             naturalSize.height - topPx,
           ),
         )
-        // Payload interprets the saved focal point relative to the CROPPED
-        // image (it swaps the base image for the cropped bytes before sizing),
-        // so re-express our full-image focal within the crop region. clampFocal-
-        // ToCrop already keeps the focal inside the crop, so this stays 0-100.
-        const cropRelativeFocal = toCropRelativeFocal(focalPoint, crop)
         updateUploadEdits({
           crop: {
             unit: '%',
@@ -198,7 +197,9 @@ export const FocalPointEditor: React.FC = () => {
             width: crop.width,
             height: crop.height,
           },
-          focalPoint: cropRelativeFocal,
+          // focalPoint is already relative to the crop region — exactly the
+          // space Payload reads it in for the cropped image.
+          focalPoint,
           heightInPixels,
           widthInPixels,
         })
@@ -214,18 +215,9 @@ export const FocalPointEditor: React.FC = () => {
     return () => clearTimeout(timeout)
   }, [crop, hasRealCrop, focalPoint, naturalSize, setModified, updateUploadEdits])
 
-  const clampFocalToCrop = useCallback(
-    (x: number, y: number) => {
-      if (crop && crop.unit === '%' && hasRealCrop) {
-        x = Math.max(crop.x, Math.min(crop.x + crop.width, x))
-        y = Math.max(crop.y, Math.min(crop.y + crop.height, y))
-      }
-      return { x, y }
-    },
-    [crop, hasRealCrop],
-  )
-
-  // Focal point drag handlers
+  // Focal point drag handler. The pointer lands somewhere on the full image;
+  // convert that full-image % into the crop-relative space the focal lives in,
+  // then clamp to the crop (0-100 inside cropRect).
   const updateFocalFromEvent = useCallback(
     (e: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent) => {
       const container = containerRef.current
@@ -233,17 +225,17 @@ export const FocalPointEditor: React.FC = () => {
       const rect = container.getBoundingClientRect()
       const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
       const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
-      let x = ((clientX - rect.left) / rect.width) * 100
-      let y = ((clientY - rect.top) / rect.height) * 100
+      const fullX = Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100))
+      const fullY = Math.max(0, Math.min(100, ((clientY - rect.top) / rect.height) * 100))
 
-      x = Math.max(0, Math.min(100, x))
-      y = Math.max(0, Math.min(100, y))
-
-      const clamped = clampFocalToCrop(x, y)
+      const rel = toCropRelativeFocal({ x: fullX, y: fullY }, cropRect)
       hasUserEditedRef.current = true
-      setFocalPoint(clamped)
+      setFocalPoint({
+        x: Math.max(0, Math.min(100, rel.x)),
+        y: Math.max(0, Math.min(100, rel.y)),
+      })
     },
-    [clampFocalToCrop],
+    [cropRect],
   )
 
   const handleMouseDown = useCallback(
@@ -339,6 +331,11 @@ export const FocalPointEditor: React.FC = () => {
 
   const cropUnitLabel = crop?.unit === 'px' ? 'px' : '%'
 
+  // Full-image position of the focal point (crop-relative → whole image). Used
+  // to place the crosshair absolutely and to feed the preview grid, which
+  // re-derives the crop-relative position itself.
+  const focalFullImage = toFullImageFocal(focalPoint, cropRect)
+
   return (
     <div className="focal-editor">
       <div className="focal-editor__layout">
@@ -363,10 +360,10 @@ export const FocalPointEditor: React.FC = () => {
                         value={Math.round(focalPoint.x)}
                         onChange={(e) => {
                           hasUserEditedRef.current = true
-                          setFocalPoint((prev) => {
-                            const x = Math.max(0, Math.min(100, Number(e.target.value)))
-                            return clampFocalToCrop(x, prev.y)
-                          })
+                          setFocalPoint((prev) => ({
+                            ...prev,
+                            x: Math.max(0, Math.min(100, Number(e.target.value))),
+                          }))
                         }}
                       />
                       <span>%</span>
@@ -381,10 +378,10 @@ export const FocalPointEditor: React.FC = () => {
                         value={Math.round(focalPoint.y)}
                         onChange={(e) => {
                           hasUserEditedRef.current = true
-                          setFocalPoint((prev) => {
-                            const y = Math.max(0, Math.min(100, Number(e.target.value)))
-                            return clampFocalToCrop(prev.x, y)
-                          })
+                          setFocalPoint((prev) => ({
+                            ...prev,
+                            y: Math.max(0, Math.min(100, Number(e.target.value))),
+                          }))
                         }}
                       />
                       <span>%</span>
@@ -557,8 +554,8 @@ export const FocalPointEditor: React.FC = () => {
                     <div
                       className="focal-editor__crosshair"
                       style={{
-                        left: `${focalPoint.x}%`,
-                        top: `${focalPoint.y}%`,
+                        left: `${focalFullImage.x}%`,
+                        top: `${focalFullImage.y}%`,
                       }}
                     >
                       <div className="focal-editor__crosshair-h" />
@@ -575,8 +572,8 @@ export const FocalPointEditor: React.FC = () => {
         <div className="focal-editor__right">
           <AspectRatioPreviewGrid
             url={imageUrl}
-            focalX={focalPoint.x}
-            focalY={focalPoint.y}
+            focalX={focalFullImage.x}
+            focalY={focalFullImage.y}
             aspectRatios={aspectRatios}
             crop={cropConfig}
           />
