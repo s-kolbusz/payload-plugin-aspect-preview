@@ -3,15 +3,16 @@ name: Release
 # Publishes to npm when a v* tag is pushed:
 #   npm version patch && git push --follow-tags
 #
-# Requires a repo secret NPM_TOKEN — an npm "Automation" access token
-# (Automation tokens bypass 2FA, which is required for CI publishing).
+# Auth is via npm Trusted Publishing (OIDC) — no NPM_TOKEN secret. The package's
+# trusted-publisher config on npmjs.com must point at this repo + this workflow
+# file (release.yml). Provenance is attached automatically.
 on:
   push:
     tags: ['v*']
 
 permissions:
   contents: read
-  id-token: write # required for npm provenance
+  id-token: write # required for npm trusted publishing (OIDC) + provenance
 
 jobs:
   publish:
@@ -27,17 +28,9 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           cache: pnpm
 
-      # Skip publishing (but still validate the tag) when no token is set —
-      # e.g. releases published manually. Set the NPM_TOKEN secret to enable
-      # automated publishing on tag push.
-      - name: Detect npm token
-        run: |
-          if [ -n "${{ secrets.NPM_TOKEN }}" ]; then
-            echo "HAS_TOKEN=true" >> "$GITHUB_ENV"
-          else
-            echo "HAS_TOKEN=false" >> "$GITHUB_ENV"
-            echo "::notice::NPM_TOKEN not set — validating the tag but skipping npm publish."
-          fi
+      # Trusted publishing needs npm >= 11.5.1; node 22 ships npm 10.
+      - name: Upgrade npm for trusted publishing
+        run: npm install -g npm@latest
 
       - run: pnpm install --frozen-lockfile
 
@@ -45,9 +38,7 @@ jobs:
 
       - run: pnpm test
 
-      # prepublishOnly rebuilds, so publish the already-verified tree.
+      # prepublishOnly rebuilds, so publish the already-verified tree. No token
+      # env — npm mints a short-lived OIDC credential from the id-token above.
       - name: Publish to npm
-        if: env.HAS_TOKEN == 'true'
         run: npm publish --provenance --access public --ignore-scripts
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
