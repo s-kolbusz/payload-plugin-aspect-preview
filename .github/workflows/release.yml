@@ -11,7 +11,7 @@ on:
     tags: ['v*']
 
 permissions:
-  contents: read
+  contents: write # create the GitHub Release
   id-token: write # required for npm trusted publishing (OIDC) + provenance
 
 jobs:
@@ -42,3 +42,21 @@ jobs:
       # env — npm mints a short-lived OIDC credential from the id-token above.
       - name: Publish to npm
         run: npm publish --provenance --access public --ignore-scripts
+
+      # Mirror the tag to a GitHub Release, using this version's CHANGELOG
+      # section as the body (falls back to auto-generated notes if absent).
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          awk -v v="$VERSION" '
+            $0 ~ "^## \\[" v "\\]" { f = 1; next }
+            f && /^## \[/ { exit }
+            f { print }
+          ' CHANGELOG.md > NOTES.md
+          if [ -s NOTES.md ]; then
+            gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file NOTES.md --verify-tag
+          else
+            gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --generate-notes --verify-tag
+          fi
