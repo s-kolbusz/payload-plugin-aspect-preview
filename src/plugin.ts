@@ -37,8 +37,24 @@ export const aspectPreviewPlugin =
     const aspectRatios = options.aspectRatios ?? DEFAULT_ASPECT_RATIOS
     const enabled = new Set(options.collections)
 
+    // Payload strips `collection.custom` from the client config, so the editor
+    // could never see it. `admin.custom` is forwarded to the browser.
+    const byCollection = Object.fromEntries(
+      options.collections.map((slug) => [slug, { aspectRatios }]),
+    )
+
     return {
       ...config,
+      admin: {
+        ...config.admin,
+        custom: {
+          ...config.admin?.custom,
+          aspectPreview: {
+            ...config.admin?.custom?.aspectPreview,
+            ...byCollection,
+          },
+        },
+      },
       collections: config.collections?.map((collection) => {
         if (!enabled.has(collection.slug)) return collection
 

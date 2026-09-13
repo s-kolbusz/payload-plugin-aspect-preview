@@ -4,6 +4,18 @@ All notable changes to this project are documented in this file. The format is
 based on [Keep a Changelog](https://keepachangelog.com/), and this project
 adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.2.2] - 2026-09-13
+
+### Fixed
+
+- **Custom `aspectRatios` now actually reach the editor.** The plugin stored them
+  in the collection's `custom` config, which Payload strips from the config it
+  sends to the browser, so the preview grid always fell back to the default
+  ratios. They are now also stored per collection in `admin.custom.aspectPreview`,
+  which Payload forwards to the client.
+- The editor resolved its collection from `data.collection`, a field upload
+  documents don't have. It now uses the `collectionSlug` from `useDocumentInfo`.
+
 ## [0.2.1] - 2026-07-12
 
 ### Fixed

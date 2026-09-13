@@ -48,6 +48,26 @@ describe('aspectPreviewPlugin', () => {
     expect((media as any).custom.aspectPreview.aspectRatios).toEqual(custom)
   })
 
+  it('stashes aspectRatios per collection in admin.custom, which reaches the client', () => {
+    const custom = [{ name: 'X', ratio: '2:1', width: 2, height: 1 }]
+    const out = aspectPreviewPlugin({ collections: ['media'], aspectRatios: custom })(baseConfig())
+    expect((out.admin as any).custom.aspectPreview.media.aspectRatios).toEqual(custom)
+    expect((out.admin as any).custom.aspectPreview.pages).toBeUndefined()
+  })
+
+  it('preserves existing admin and admin.custom keys', () => {
+    const config = {
+      ...baseConfig(),
+      admin: { user: 'users', custom: { other: true } },
+    } as unknown as Config
+    const out = aspectPreviewPlugin({ collections: ['media'] })(config)
+    expect((out.admin as any).user).toBe('users')
+    expect((out.admin as any).custom.other).toBe(true)
+    expect((out.admin as any).custom.aspectPreview.media.aspectRatios).toEqual(
+      DEFAULT_ASPECT_RATIOS,
+    )
+  })
+
   it('leaves non-enabled collections untouched', () => {
     const out = aspectPreviewPlugin({ collections: ['media'] })(baseConfig())
     const pages = findCollection(out, 'pages')

@@ -12,19 +12,21 @@ import type { AspectRatioConfig, CropConfig } from '../types'
 import { AspectRatioPreviewGrid } from './AspectRatioPreviewGrid'
 
 export const FocalPointEditor: React.FC = () => {
-  const { data } = useDocumentInfo()
+  const { collectionSlug, data } = useDocumentInfo()
   const { setModified } = useForm()
   const { uploadEdits, updateUploadEdits } = useUploadEdits()
-  const { getEntityConfig } = useConfig()
+  const { config } = useConfig()
 
-  // Read the ratios the plugin stashed in the collection's `custom` config.
-  // Falls back to the shipped defaults so the editor renders even if a
-  // consumer wired the field without options.
-  const collectionSlug = typeof data?.collection === 'string' ? data.collection : undefined
-  const entityConfig = collectionSlug ? getEntityConfig({ collectionSlug }) : undefined
+  // Read the ratios the plugin stashed in `admin.custom` (the collection's own
+  // `custom` never reaches the client). Falls back to the shipped defaults so
+  // the editor renders even if a consumer wired the field without options.
+  const stashed = (
+    config.admin?.custom as
+      | { aspectPreview?: Record<string, { aspectRatios?: AspectRatioConfig[] }> }
+      | undefined
+  )?.aspectPreview
   const aspectRatios =
-    (((entityConfig as unknown as { custom?: { aspectPreview?: { aspectRatios?: AspectRatioConfig[] } } })?.custom
-      ?.aspectPreview?.aspectRatios) as AspectRatioConfig[] | undefined) ?? DEFAULT_ASPECT_RATIOS
+    (collectionSlug ? stashed?.[collectionSlug]?.aspectRatios : undefined) ?? DEFAULT_ASPECT_RATIOS
 
   const hasUserEditedRef = useRef(false)
 
