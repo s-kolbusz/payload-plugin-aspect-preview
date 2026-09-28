@@ -2,27 +2,33 @@
  * Plain CSS, no Sass: Payload v4 drops the `@payloadcms/ui/scss` import this file used to
  * need, and every sizing value below was Payload's `base(n)` (20px × n), now written out.
  *
- * Colours and radii go through the plugin's own variables. Each reads Payload v4's token
- * first and falls back to the v3 one, so the same stylesheet renders on both — v3 defines
- * none of the v4 names, v4 none of the v3 ones.
+ * Colours and radii go through the plugin's own variables, one per v3 token the stylesheet
+ * used to read, so a v3 admin renders exactly what it did before. Each reads v3's token
+ * first and falls back to v4's — v4 defines no `--theme-*` or `--style-radius-*` at all.
+ * Not the other way round: v4's names (`--color-border`, `--color-text`, …) are Tailwind's
+ * too, so on a v3 admin that also loads a Tailwind site theme they are already set — to the
+ * site's colours.
  */
 .focal-preview,
 .focal-editor {
-  --apv-bg: var(--color-bg, var(--theme-elevation-0));
-  --apv-bg-subtle: var(--color-bg-secondary, var(--theme-elevation-50));
-  --apv-bg-muted: var(--color-bg-tertiary, var(--theme-elevation-100));
-  --apv-bg-inverse: var(--color-bg-inverse, var(--theme-elevation-900));
-  --apv-on-inverse: var(--color-text-oninverse, var(--theme-elevation-0));
-  --apv-border: var(--color-border, var(--theme-elevation-100));
-  --apv-border-strong: var(--color-border-strong, var(--theme-elevation-150));
-  --apv-border-focus: var(--color-border-selected, var(--theme-elevation-400));
-  --apv-text: var(--color-text, var(--theme-text));
-  --apv-text-muted: var(--color-text-secondary, var(--theme-elevation-500));
-  --apv-text-disabled: var(--color-text-disabled, var(--theme-elevation-400));
+  --apv-bg: var(--theme-elevation-0, var(--color-bg));
+  --apv-bg-subtle: var(--theme-elevation-50, var(--color-bg-secondary));
+  --apv-bg-muted: var(--theme-elevation-100, var(--color-bg-tertiary));
+  --apv-bg-inverse: var(--theme-elevation-900, var(--color-bg-inverse));
+  --apv-on-inverse: var(--theme-elevation-0, var(--color-text-oninverse));
+  --apv-border: var(--theme-elevation-100, var(--color-border));
+  --apv-border-strong: var(--theme-elevation-150, var(--color-border-strong));
+  --apv-border-hover: var(--theme-elevation-200, var(--color-border-strong));
+  --apv-border-focus: var(--theme-elevation-400, var(--color-border-selected));
+  --apv-text: var(--theme-text, var(--color-text));
+  --apv-text-strong: var(--theme-elevation-800, var(--color-text));
+  --apv-text-soft: var(--theme-elevation-600, var(--color-text-secondary));
+  --apv-text-muted: var(--theme-elevation-500, var(--color-text-secondary));
+  --apv-text-disabled: var(--theme-elevation-400, var(--color-text-disabled));
   /* Payload has never defined `--border-radius-*`, which this file used to read, so every
      corner rendered square. v3's real names are `--style-radius-*`. */
-  --apv-radius-s: var(--radius-small, var(--style-radius-s));
-  --apv-radius-m: var(--radius-medium, var(--style-radius-m));
+  --apv-radius-s: var(--style-radius-s, var(--radius-small));
+  --apv-radius-m: var(--style-radius-m, var(--radius-medium));
 }
 
 .focal-preview__grid {
@@ -220,7 +226,7 @@
 .focal-editor__row-label {
   font-size: 14px;
   font-weight: 600;
-  color: var(--apv-text);
+  color: var(--apv-text-strong);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   width: 52px;
@@ -298,7 +304,7 @@
 }
 .focal-editor__input-group label {
   font-size: 14px;
-  color: var(--apv-text-muted);
+  color: var(--apv-text-soft);
   font-weight: 600;
   line-height: 1;
   min-width: 10px;
@@ -342,7 +348,7 @@
 }
 .focal-editor__btn:hover {
   background: var(--apv-bg-muted);
-  border-color: var(--apv-border-strong);
+  border-color: var(--apv-border-hover);
 }
 .focal-editor__image-wrapper {
   width: 100%;
@@ -419,7 +425,7 @@
 .focal-editor__empty {
   padding: 40px;
   text-align: center;
-  color: var(--apv-text-muted);
+  color: var(--apv-text-soft);
   font-size: 15px;
   border: 2px dashed var(--apv-border);
   border-radius: var(--apv-radius-m);

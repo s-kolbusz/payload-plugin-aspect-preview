@@ -4,7 +4,7 @@ All notable changes to this project are documented in this file. The format is
 based on [Keep a Changelog](https://keepachangelog.com/), and this project
 adheres to [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.2.3] - 2026-09-28
 
 ### Fixed
 
@@ -17,10 +17,13 @@ adheres to [Semantic Versioning](https://semver.org/).
 - **The stylesheet is plain CSS, and ready for Payload v4.** It no longer imports
   `~@payloadcms/ui/scss`, which v4 removes; the `base()` sizes it pulled from
   there are written out as pixels, so the editor looks the same. Colours and radii
-  go through the plugin's own `--apv-*` variables, each reading v4's token
-  (`--color-bg`, `--color-text`, `--radius-small`, …) and falling back to v3's
-  (`--theme-elevation-*`, `--style-radius-*`). The peer range stays `^3.85.0`
-  until the editor has been checked on a v4 release.
+  go through the plugin's own `--apv-*` variables — one per v3 token the
+  stylesheet read, so a v3 admin renders exactly as before — each reading v3's token
+  (`--theme-elevation-*`, `--style-radius-*`) and falling back to v4's
+  (`--color-bg`, `--color-text`, `--radius-small`, …). v3 first because v4's
+  names are also Tailwind's, which a v3 admin loading a Tailwind site theme
+  already has set to the site's colours. The peer range stays `^3.85.0` until
+  the editor has been checked on a v4 release.
 - Consumers no longer need Sass to compile the plugin's styles.
 
 ## [0.2.2] - 2026-09-13
