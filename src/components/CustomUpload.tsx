@@ -21,7 +21,7 @@ import {
 import { isImage } from 'payload/shared'
 import React, { useCallback, useState } from 'react'
 
-import '../styles.scss'
+import '../styles.css'
 
 const baseClass = 'file-field'
 const sizePreviewSlug = 'preview-sizes'

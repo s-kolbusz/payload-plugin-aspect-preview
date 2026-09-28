@@ -1,0 +1,432 @@
+/*
+ * Plain CSS, no Sass: Payload v4 drops the `@payloadcms/ui/scss` import this file used to
+ * need, and every sizing value below was Payload's `base(n)` (20px × n), now written out.
+ *
+ * Colours and radii go through the plugin's own variables. Each reads Payload v4's token
+ * first and falls back to the v3 one, so the same stylesheet renders on both — v3 defines
+ * none of the v4 names, v4 none of the v3 ones.
+ */
+.focal-preview,
+.focal-editor {
+  --apv-bg: var(--color-bg, var(--theme-elevation-0));
+  --apv-bg-subtle: var(--color-bg-secondary, var(--theme-elevation-50));
+  --apv-bg-muted: var(--color-bg-tertiary, var(--theme-elevation-100));
+  --apv-bg-inverse: var(--color-bg-inverse, var(--theme-elevation-900));
+  --apv-on-inverse: var(--color-text-oninverse, var(--theme-elevation-0));
+  --apv-border: var(--color-border, var(--theme-elevation-100));
+  --apv-border-strong: var(--color-border-strong, var(--theme-elevation-150));
+  --apv-border-focus: var(--color-border-selected, var(--theme-elevation-400));
+  --apv-text: var(--color-text, var(--theme-text));
+  --apv-text-muted: var(--color-text-secondary, var(--theme-elevation-500));
+  --apv-text-disabled: var(--color-text-disabled, var(--theme-elevation-400));
+  /* Payload has never defined `--border-radius-*`, which this file used to read, so every
+     corner rendered square. v3's real names are `--style-radius-*`. */
+  --apv-radius-s: var(--radius-small, var(--style-radius-s));
+  --apv-radius-m: var(--radius-medium, var(--style-radius-m));
+}
+
+.focal-preview__grid {
+  columns: 3;
+  column-gap: 10px;
+}
+@media (max-width: 1400px) {
+  .focal-preview__grid {
+    columns: 2;
+  }
+}
+@media (max-width: 768px) {
+  .focal-preview__grid {
+    columns: 1;
+  }
+}
+.focal-preview__card {
+  break-inside: avoid;
+  margin-bottom: 10px;
+  background: var(--apv-bg);
+  border: 1px solid var(--apv-border);
+  border-radius: var(--apv-radius-s);
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.focal-preview__card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+.focal-preview__card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+  padding: 7.5px 10px;
+  background: var(--apv-bg-subtle);
+  border-bottom: 1px solid var(--apv-border);
+}
+.focal-preview__card-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--apv-text);
+}
+.focal-preview__card-ratio {
+  font-size: 12px;
+  color: var(--apv-text-muted);
+  background: var(--apv-bg-muted);
+  padding: 1px 5px;
+  border-radius: var(--apv-radius-s);
+  font-weight: 500;
+}
+.focal-preview__card-frame {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: var(--apv-bg-muted);
+  line-height: 0;
+}
+.focal-preview__card-image {
+  display: block;
+  transition: opacity 0.2s ease;
+}
+.focal-preview__card-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+  z-index: 1;
+}
+.focal-preview__card-crosshair {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 2;
+  width: 16px;
+  height: 16px;
+}
+.focal-preview__card-crosshair::before, .focal-preview__card-crosshair::after {
+  content: "";
+  position: absolute;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
+}
+.focal-preview__card-crosshair::before {
+  width: 100%;
+  height: 2px;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+.focal-preview__card-crosshair::after {
+  width: 2px;
+  height: 100%;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+}
+.focal-preview__card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+  padding: 5px 10px;
+  background: var(--apv-bg-subtle);
+  border-top: 1px solid var(--apv-border);
+}
+.focal-preview__card-usage {
+  font-size: 11px;
+  color: var(--apv-text-muted);
+  line-height: 1.3;
+}
+.focal-preview__card-source {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 4px;
+  border-radius: var(--apv-radius-s);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
+}
+.focal-preview__card-source--css {
+  color: #0f766e;
+  background: #ccfbf1;
+}
+.focal-preview__card-source--crop {
+  color: #9a3412;
+  background: #ffedd5;
+}
+
+.focal-editor {
+  margin-top: 20px;
+  padding: 20px;
+  background: var(--apv-bg);
+  border-radius: var(--apv-radius-m);
+  border: 1px solid var(--apv-border);
+}
+.focal-editor__layout {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+@media (max-width: 900px) {
+  .focal-editor__layout {
+    flex-direction: column;
+  }
+}
+.focal-editor__left {
+  position: sticky;
+  top: 75px;
+  align-self: flex-start;
+  width: 50%;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+@media (max-width: 900px) {
+  .focal-editor__left {
+    position: relative;
+    top: auto;
+    width: 100%;
+  }
+}
+.focal-editor__right {
+  flex: 1;
+  min-width: 0;
+}
+.focal-editor__toolbar {
+  display: flex;
+  align-items: stretch;
+  gap: 40px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.focal-editor__toolbar-inputs {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.focal-editor__toolbar-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.focal-editor__toolbar-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.focal-editor__row-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--apv-text);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  width: 52px;
+  flex-shrink: 0;
+  text-align: left;
+  align-self: flex-start;
+  padding-right: 5px;
+}
+.focal-editor__toolbar-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  align-items: stretch;
+  justify-content: space-between;
+  flex: 1 1 auto;
+}
+.focal-editor__mode-toggle {
+  display: flex;
+  gap: 0;
+  border-radius: var(--apv-radius-s);
+  overflow: hidden;
+  border: 1px solid var(--apv-border-strong);
+}
+.focal-editor__mode-btn {
+  padding: 7px 15px;
+  border: none;
+  background: var(--apv-bg);
+  color: var(--apv-text);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border-right: 1px solid var(--apv-border-strong);
+  flex: 1 1 100%;
+}
+.focal-editor__mode-btn:last-child {
+  border-right: none;
+}
+.focal-editor__mode-btn--active {
+  background: var(--apv-bg-inverse);
+  color: var(--apv-on-inverse);
+}
+.focal-editor__mode-btn:hover:not(.focal-editor__mode-btn--active) {
+  background: var(--apv-bg-muted);
+}
+.focal-editor__inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.focal-editor__subgroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.focal-editor__subgroup-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--apv-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  width: 100%;
+  text-align: left;
+}
+.focal-editor__subgroup-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.focal-editor__input-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.focal-editor__input-group label {
+  font-size: 14px;
+  color: var(--apv-text-muted);
+  font-weight: 600;
+  line-height: 1;
+  min-width: 10px;
+  text-align: center;
+}
+.focal-editor__input-group input {
+  width: 48px;
+  padding: 5px 7px;
+  border: 1px solid var(--apv-border-strong);
+  border-radius: var(--apv-radius-s);
+  background: var(--apv-bg);
+  color: var(--apv-text);
+  font-size: 14px;
+  text-align: center;
+  font-weight: 500;
+}
+.focal-editor__input-group input:focus {
+  outline: none;
+  border-color: var(--apv-border-focus);
+  box-shadow: 0 0 0 2px var(--apv-border);
+}
+.focal-editor__input-group input:disabled {
+  background: var(--apv-bg-subtle);
+  color: var(--apv-text-disabled);
+  cursor: not-allowed;
+}
+.focal-editor__input-group span {
+  font-size: 13px;
+  color: var(--apv-text-muted);
+}
+.focal-editor__btn {
+  padding: 7px 12.5px;
+  border-radius: var(--apv-radius-s);
+  border: 1px solid var(--apv-border-strong);
+  background: var(--apv-bg);
+  color: var(--apv-text);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.focal-editor__btn:hover {
+  background: var(--apv-bg-muted);
+  border-color: var(--apv-border-strong);
+}
+.focal-editor__image-wrapper {
+  width: 100%;
+  border-radius: var(--apv-radius-m);
+  overflow: hidden;
+  border: 1px solid var(--apv-border);
+  background: var(--apv-bg-subtle);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.focal-editor__react-crop {
+  width: 100%;
+  display: block;
+  line-height: 0;
+}
+.focal-editor__react-crop.is-focal-mode {
+  cursor: crosshair;
+}
+.focal-editor__react-crop.is-crop-mode {
+  cursor: crosshair;
+}
+.focal-editor__react-crop img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+.focal-editor__crop-overlay {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  border: 2px dashed rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45);
+  transition: all 0.15s ease;
+}
+.focal-editor__focal-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+.focal-editor__focal-overlay.is-active {
+  pointer-events: auto;
+  cursor: crosshair;
+}
+.focal-editor__crosshair {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 2;
+  width: 24px;
+  height: 24px;
+}
+.focal-editor__crosshair-h, .focal-editor__crosshair-v {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.4);
+}
+.focal-editor__crosshair-h {
+  width: 24px;
+  height: 2px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.focal-editor__crosshair-v {
+  width: 2px;
+  height: 24px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.focal-editor__empty {
+  padding: 40px;
+  text-align: center;
+  color: var(--apv-text-muted);
+  font-size: 15px;
+  border: 2px dashed var(--apv-border);
+  border-radius: var(--apv-radius-m);
+  background: var(--apv-bg-subtle);
+}
+
+.ReactCrop__crop-selection {
+  border: 2px dashed rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+}

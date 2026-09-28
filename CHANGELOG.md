@@ -4,6 +4,25 @@ All notable changes to this project are documented in this file. The format is
 based on [Keep a Changelog](https://keepachangelog.com/), and this project
 adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Fixed
+
+- **Corners are rounded again.** The stylesheet read `--border-radius-s/m`, which
+  Payload has never defined, so every card, input and button rendered square. It
+  now reads Payload's radius tokens (`--style-radius-*` on v3).
+
+### Changed
+
+- **The stylesheet is plain CSS, and ready for Payload v4.** It no longer imports
+  `~@payloadcms/ui/scss`, which v4 removes; the `base()` sizes it pulled from
+  there are written out as pixels, so the editor looks the same. Colours and radii
+  go through the plugin's own `--apv-*` variables, each reading v4's token
+  (`--color-bg`, `--color-text`, `--radius-small`, …) and falling back to v3's
+  (`--theme-elevation-*`, `--style-radius-*`). The peer range stays `^3.85.0`
+  until the editor has been checked on a v4 release.
+- Consumers no longer need Sass to compile the plugin's styles.
+
 ## [0.2.2] - 2026-09-13
 
 ### Fixed
