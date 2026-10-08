@@ -1,25 +1,29 @@
-# payload-plugin-aspect-preview
+# Payload CMS Image Preview Plugin
 
 [![npm version](https://img.shields.io/npm/v/payload-plugin-aspect-preview.svg)](https://www.npmjs.com/package/payload-plugin-aspect-preview)
 [![license](https://img.shields.io/npm/l/payload-plugin-aspect-preview.svg)](./LICENSE.md)
 
-Single-screen crop, focal point, and **live multi-aspect-ratio preview** for Payload upload collections. Replaces Payload's separate crop/focal drawers with one editor that shows, in real time, how your image will look at every aspect ratio your frontend uses.
+**See how your photo fits before you save it.**
 
-![edit_preview](./payload-plugin-aspect-preview.png)
+One photo might need to work in a wide hero, a square card, and a portrait mobile layout. **Image Preview for Payload CMS** lets editors check those formats side by side, adjust the crop or focal point, and watch every preview update as they edit.
 
-## Features
+`payload-plugin-aspect-preview` is a **Payload CMS plugin for image cropping, focal point editing, and responsive image previews**. It adds a live aspect ratio preview grid to upload collections, so editors can check several image formats on one screen in the Payload admin.
 
-- Crop, focal point, and preview on **one screen** — no drawer round-trips.
-- **Live preview grid** across any set of aspect ratios as you drag the focal point or draw a crop.
-- **Zero-config defaults** (six common ratios) — override with your own list.
-- Simulates the frontend's `object-fit: cover` + focal positioning so previews match production.
+![Payload CMS image editor with crop and focal point controls beside live previews of the same photo in multiple aspect ratios](https://raw.githubusercontent.com/s-kolbusz/payload-plugin-aspect-preview/main/payload-plugin-aspect-preview.png)
 
-## Requirements
+[Install the plugin](#installation) · [Configure your website's image formats](#preview-your-websites-image-formats)
 
-- Payload `^3.85.0`
-- React `^19`
+## Help editors choose images that fit
 
-> **Compatibility note:** the replacement upload field builds on `@payloadcms/ui` internals (`FileDetails`, `Dropzone`, `PreviewSizes`, …). These are not a stable public API, so a Payload minor upgrade may occasionally require a plugin update. Pin your Payload version and test after upgrades.
+A photo can look great in the media library and lose its subject when it fills a different shape on the website. Editors need to see what stays in the frame while they choose the image's crop and focal point.
+
+- **Check several formats at once.** Compare hero, card, thumbnail, and mobile aspect ratios in a live preview grid.
+- **Keep the subject in view.** Move the focal point and see how the framing changes across the configured ratios.
+- **Crop with the result in sight.** Draw a crop while watching the previews on the same screen.
+- **Preview new images before saving.** The editor appears as soon as you select an image, including on a new upload.
+- **Use labels your editors recognize.** Configure formats such as “Homepage hero” or “Product card” with descriptions of where they are used.
+
+Developers add the plugin to their upload collections and configure the ratios used by their frontend. Editors get the previews directly in Payload. Six common ratios are included to get started: square, 4:3, 3:2, 16:9, portrait 9:16, and a 1200 × 630 social share format.
 
 ## Installation
 
@@ -30,17 +34,41 @@ pnpm add payload-plugin-aspect-preview
 ## Quick start
 
 ```ts
+import { buildConfig } from 'payload'
 import { aspectPreviewPlugin } from 'payload-plugin-aspect-preview'
 
 export default buildConfig({
   // ...
   plugins: [
-    aspectPreviewPlugin({ collections: ['media'] }), // uses built-in default ratios
+    aspectPreviewPlugin({ collections: ['media'] }),
   ],
 })
 ```
 
-Your `media` collection must be an upload collection (`upload: { ... }`), ideally with `focalPoint: true`.
+Your `media` collection must have uploads enabled. To use Payload's image processing and persist focal points, configure `sharp` in your Payload config, keep `focalPoint` enabled, and define `imageSizes` or `resizeOptions` on the collection. See [Payload's upload configuration](https://payloadcms.com/docs/upload/overview).
+
+### For editors
+
+1. Select a new image or open an existing image in the configured upload collection.
+2. Move the focal point or draw a crop. Compare the live previews for your image formats.
+3. Save the document when you are happy with the framing. Payload applies the image edits through its upload workflow.
+
+## Preview your website's image formats
+
+Give each preview the name of the component where the image will appear. Set its proportions to match your frontend:
+
+```ts
+aspectPreviewPlugin({
+  collections: ['media'],
+  aspectRatios: [
+    { name: 'Homepage hero', ratio: '21:9', width: 21, height: 9, source: 'css', usage: 'Wide banner at the top of the homepage' },
+    { name: 'Product card', ratio: '1:1', width: 1, height: 1, source: 'css', usage: 'Square images in the product grid' },
+    { name: 'Mobile feature', ratio: '9:16', width: 9, height: 16, source: 'css', usage: 'Portrait image in the mobile layout' },
+  ],
+})
+```
+
+The previews simulate image framing using cover sizing and focal positioning. Configure the ratios yourself and use the saved focal point in your frontend's image positioning. The plugin previews the image inside each shape; it does not render your website's components or detect their styles automatically.
 
 ## Configuration
 
@@ -58,23 +86,11 @@ Your `media` collection must be an upload collection (`upload: { ... }`), ideall
 | `ratio` | `string` | yes | Display token (e.g. `"16:9"`). |
 | `width` | `number` | yes | Ratio numerator (or absolute px width). |
 | `height` | `number` | yes | Ratio denominator (or absolute px height). |
-| `source` | `'css' \| 'crop'` | no | Badge showing how the frontend renders it. Default `'css'`. |
+| `source` | `'css' \| 'crop'` | no | Display badge describing the intended use. Does not change image processing. |
 | `usage` | `string` | no | Description shown in the card footer. |
-| `category` | `string` | no | Free-form grouping label. |
+| `category` | `string` | no | Optional metadata label. Does not group cards in the current UI. |
 
 ## Examples
-
-**Custom aspect ratios**
-
-```ts
-aspectPreviewPlugin({
-  collections: ['media'],
-  aspectRatios: [
-    { name: 'Hero', ratio: '21:9', width: 21, height: 9, source: 'css', usage: 'Landing hero' },
-    { name: 'Card', ratio: '1:1', width: 1, height: 1, source: 'crop', usage: 'Product cards' },
-  ],
-})
-```
 
 **Multiple collections**
 
@@ -90,7 +106,39 @@ aspectPreviewPlugin({ collections: ['media'], disabled: true })
 
 ## How it works
 
-The plugin wraps each upload collection with a custom admin UI component (`CustomUpload`). It injects a UI field (`FocalPointEditor`) that overlays the live preview grid, replacing Payload's default crop/adjust drawer. The grid simulates `object-fit: cover` with the focal point as the anchor, so you see exactly how each ratio will render on the frontend. Crop and focal coordinates are stored in the document's built-in `focalPoint` field (if present) and in-memory image crop state managed by react-image-crop.
+The plugin replaces the configured collections' upload UI with `CustomUpload` and adds an `aspectPreview` UI field rendered by `FocalPointEditor`. Crop and focal point edits flow through Payload's upload-edits context. Payload applies the crop on save and persists focal coordinates as `focalX` and `focalY`.
+
+The preview grid uses cover sizing equivalent to `object-fit: cover` and `object-position` based on the focal point. When a crop is active, the grid previews that crop region with the focal point measured relative to it.
+
+## Frequently asked questions
+
+### When should I use this plugin?
+
+`payload-plugin-aspect-preview` adds live previews of multiple aspect ratios to Payload upload collections. Use it when one image needs to fit several formats, such as hero banners, product cards, thumbnails, and portrait mobile images. Configure `aspectPreviewPlugin` with your collection slugs and the ratios your frontend uses.
+
+### How does it differ from Payload's built-in crop and focal point tools?
+
+Payload already supports image cropping, focal points, and generated image size previews. This plugin brings crop and focal point editing together with a preview grid that updates as you edit. Its preview ratios can represent your frontend's image containers, even when you do not generate separate files for those ratios.
+
+### Does it generate a separate crop for each preview?
+
+No. The grid shows how one shared crop and focal point fit different aspect ratios. Adding a preview does not create a new image size. Configure generated image sizes through Payload's `imageSizes` option.
+
+### Is this a full page live preview?
+
+It previews image framing inside the media editor. Use Payload's page live preview for the rest of your layout, text, and components.
+
+### Will the previews match my website?
+
+They model cover sizing with focal positioning at your configured aspect ratios. Your frontend must use the corresponding ratios and saved focal coordinates. Different fit modes, additional crops, overlays, or image processing can change the result.
+
+## Requirements and compatibility
+
+- Payload and `@payloadcms/ui` `^3.85.0`
+- React `^19.0.0`
+- Node.js `>=20.9.0`
+
+The replacement upload UI uses `@payloadcms/ui` internals (`FileDetails`, `Dropzone`, `PreviewSizes`, …). These are not a stable public API, so a Payload minor upgrade may require a plugin update. Pin your Payload version and test after upgrades.
 
 ## License
 

@@ -1,15 +1,25 @@
 {
   "name": "payload-plugin-aspect-preview",
   "version": "0.2.3",
-  "description": "Single-screen crop, focal point, and live multi-aspect-ratio preview editor for Payload upload collections.",
+  "description": "Payload CMS plugin for image cropping, focal point editing, and live responsive image previews across hero, card, and mobile aspect ratios.",
   "keywords": [
     "payload",
     "payload-plugin",
     "payloadcms",
+    "payloadcms-plugin",
+    "payload-cms",
+    "cms",
+    "image-preview",
+    "image-editor",
+    "image-crop",
+    "image-cropping",
     "focal-point",
     "crop",
     "aspect-ratio",
-    "media"
+    "media",
+    "media-library",
+    "responsive-images",
+    "editor-experience"
   ],
   "license": "MIT",
   "author": "Sebastian Kolbusz <s.kolbusz@outlook.com>",
