@@ -125,7 +125,9 @@ function computeCroppedBackgroundStyle(
 // rest of the zone (min → max) is drawn hatched.
 const OverlayZone: React.FC<{ overlay: AspectRatioOverlay }> = ({ overlay }) => {
   const max = Math.max(overlay.max ?? overlay.min, overlay.min)
-  const solidShare = max > 0 ? (overlay.min / max) * 100 : 0
+  // Validation rejects an overlay that covers nothing; don't leave a stray label if one slips by.
+  if (!(max > 0)) return null
+  const solidShare = (overlay.min / max) * 100
 
   return (
     <div

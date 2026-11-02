@@ -18,8 +18,9 @@ adheres to [Semantic Versioning](https://semver.org/).
   changes, exactly as on the site; they ignore the pointer and follow Payload's
   light and dark themes. Ratios without `overlays` render as before.
 - The plugin validates `overlays` when it is applied and throws an error naming
-  the ratio and the overlay for an unknown `edge`, a fraction outside 0–1, or a
-  `max` below `min`.
+  the ratio and the overlay when `overlays` isn't an array, a `label` is empty,
+  the `edge` is unknown, `min` or `max` isn't a fraction from 0 to 1, `max` is
+  below `min`, or the overlay covers nothing (`min` 0 with no `max` above 0).
 - `AspectRatioOverlay` type, exported from the package root and `/types`.
 
 ## [0.2.3] - 2026-09-28

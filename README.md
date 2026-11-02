@@ -109,7 +109,7 @@ aspectPreviewPlugin({
 
 The bands are fixed to the frame, so they stay in place while the image moves under them as you change the focal point or crop. They don't block the editor and follow Payload's light and dark themes. Ratios without `overlays` look exactly as before.
 
-The plugin checks overlays when Payload loads its config. An invalid entry (an unknown `edge`, a fraction outside 0–1, or `max` below `min`) stops startup with an error that names the ratio and the overlay.
+The plugin checks overlays when Payload loads its config. An invalid entry (an empty `label`, an unknown `edge`, a fraction outside 0–1, `max` below `min`, or an overlay that covers nothing) stops startup with an error that names the ratio and the overlay.
 
 ## Configuration
 

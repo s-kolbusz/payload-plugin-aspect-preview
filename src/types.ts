@@ -1,3 +1,5 @@
+import type { OVERLAY_EDGES } from './validate.js'
+
 /**
  * A single aspect ratio shown in the editor's live preview grid. Pass an array
  * of these as {@link AspectPreviewPluginOptions.aspectRatios} to tailor the
@@ -41,8 +43,8 @@ export interface AspectRatioConfig {
 export interface AspectRatioOverlay {
   /** Shown inside the band, e.g. "Title + price". */
   label: string
-  /** The frame edge the covered area starts from. */
-  edge: 'top' | 'bottom' | 'left' | 'right'
+  /** The frame edge the covered area starts from: `'top' | 'bottom' | 'left' | 'right'`. */
+  edge: (typeof OVERLAY_EDGES)[number]
   /** Fraction of the frame always covered, 0–1. */
   min: number
   /**

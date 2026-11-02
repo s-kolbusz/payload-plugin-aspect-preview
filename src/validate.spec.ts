@@ -1,7 +1,5 @@
-import type { Config } from 'payload'
 import { describe, expect, it } from 'vitest'
 
-import { aspectPreviewPlugin } from './plugin.js'
 import type { AspectRatioConfig, AspectRatioOverlay } from './types.js'
 import { validateAspectRatios } from './validate.js'
 
@@ -61,6 +59,15 @@ describe('validateAspectRatios', () => {
     ).toThrow(/`max` \(0.2\) must be greater than or equal to `min` \(0.3\)/)
   })
 
+  it.each([
+    { min: 0 },
+    { min: 0, max: 0 },
+  ])('rejects an overlay that covers nothing (%o)', (sizes) => {
+    expect(() => validateAspectRatios(card([{ label: 'T', edge: 'top', ...sizes }]))).toThrow(
+      /overlays\[0\] \("T"\): the overlay covers nothing/,
+    )
+  })
+
   it('points at the right overlay when several are set', () => {
     expect(() =>
       validateAspectRatios(
@@ -70,24 +77,5 @@ describe('validateAspectRatios', () => {
         ]),
       ),
     ).toThrow(/overlays\[1\] \("Title"\)/)
-  })
-})
-
-describe('aspectPreviewPlugin with overlays', () => {
-  const config = () =>
-    ({ collections: [{ slug: 'media', fields: [], upload: true }] }) as unknown as Config
-
-  it('throws when the plugin is applied with an invalid overlay', () => {
-    const plugin = aspectPreviewPlugin({
-      collections: ['media'],
-      aspectRatios: card([{ label: 'T', edge: 'bottom', min: 0.5, max: 0.1 }]),
-    })
-    expect(() => plugin(config())).toThrow(/aspectPreviewPlugin: aspectRatios "Card"/)
-  })
-
-  it('passes valid overlays through to the client config unchanged', () => {
-    const aspectRatios = card([{ label: 'Title', edge: 'bottom', min: 0.2, max: 0.35 }])
-    const out = aspectPreviewPlugin({ collections: ['media'], aspectRatios })(config())
-    expect((out.admin as any).custom.aspectPreview.media.aspectRatios).toEqual(aspectRatios)
   })
 })

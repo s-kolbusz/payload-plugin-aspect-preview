@@ -69,4 +69,18 @@ describe('preview overlays', () => {
     expect(html).toContain('--apv-zone-solid:100%')
     expect(html).not.toContain('focal-preview__zone-range')
   })
+
+  it('draws no zone (and no stray label) for an overlay that covers nothing', () => {
+    const html = render([
+      {
+        name: 'Card',
+        ratio: '1:1',
+        width: 1,
+        height: 1,
+        overlays: [{ label: 'Empty', edge: 'top', min: 0 }],
+      },
+    ])
+    expect(html).not.toContain('aspect-preview-overlay')
+    expect(html).not.toContain('Empty')
+  })
 })
