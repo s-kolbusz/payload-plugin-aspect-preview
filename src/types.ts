@@ -1,3 +1,5 @@
+import type { OVERLAY_EDGES } from './validate.js'
+
 /**
  * A single aspect ratio shown in the editor's live preview grid. Pass an array
  * of these as {@link AspectPreviewPluginOptions.aspectRatios} to tailor the
@@ -18,6 +20,38 @@ export interface AspectRatioConfig {
   usage?: string
   /** Optional free-form grouping label. */
   category?: string
+  /**
+   * Areas of this ratio's frame that your frontend covers with text or UI
+   * (a title band, price chips, …), drawn over the preview so editors keep the
+   * subject clear of them. Off unless set.
+   */
+  overlays?: AspectRatioOverlay[]
+}
+
+/**
+ * An area your frontend covers along one edge of an image, as fractions (0–1)
+ * of the frame's height (`top`/`bottom`) or width (`left`/`right`). The band
+ * sits over the frame, not the image, so it stays put while the focal point
+ * and crop move the image underneath — exactly as on the site.
+ *
+ * @example
+ * ```ts
+ * // A caption that always takes the bottom 20% and up to 35% with a long title
+ * { label: 'Title + price', edge: 'bottom', min: 0.2, max: 0.35 }
+ * ```
+ */
+export interface AspectRatioOverlay {
+  /** Shown inside the band, e.g. "Title + price". */
+  label: string
+  /** The frame edge the covered area starts from: `'top' | 'bottom' | 'left' | 'right'`. */
+  edge: (typeof OVERLAY_EDGES)[number]
+  /** Fraction of the frame always covered, 0–1. */
+  min: number
+  /**
+   * Fraction covered at worst (e.g. a long title wrapping), 0–1 and `≥ min`.
+   * The `min → max` stretch is drawn lighter. Defaults to `min`.
+   */
+  max?: number
 }
 
 /** Options for {@link aspectPreviewPlugin}. */

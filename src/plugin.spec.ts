@@ -82,4 +82,34 @@ describe('aspectPreviewPlugin', () => {
     expect((media as any).custom.aspectPreview).toBeDefined()
     expect((media as any).admin?.components?.edit?.Upload).toBeUndefined()
   })
+
+  it('throws when applied with an invalid overlay, naming the ratio', () => {
+    const plugin = aspectPreviewPlugin({
+      collections: ['media'],
+      aspectRatios: [
+        {
+          name: 'Card',
+          ratio: '4:5',
+          width: 4,
+          height: 5,
+          overlays: [{ label: 'T', edge: 'bottom', min: 0.5, max: 0.1 }],
+        },
+      ],
+    })
+    expect(() => plugin(baseConfig())).toThrow(/aspectPreviewPlugin: aspectRatios "Card"/)
+  })
+
+  it('passes valid overlays through to the client config unchanged', () => {
+    const aspectRatios = [
+      {
+        name: 'Card',
+        ratio: '4:5',
+        width: 4,
+        height: 5,
+        overlays: [{ label: 'Title', edge: 'bottom' as const, min: 0.2, max: 0.35 }],
+      },
+    ]
+    const out = aspectPreviewPlugin({ collections: ['media'], aspectRatios })(baseConfig())
+    expect((out.admin as any).custom.aspectPreview.media.aspectRatios).toEqual(aspectRatios)
+  })
 })

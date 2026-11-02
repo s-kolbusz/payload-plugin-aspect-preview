@@ -2,6 +2,7 @@ import type { CollectionConfig, Config, Plugin } from 'payload'
 
 import { DEFAULT_ASPECT_RATIOS } from './defaults.js'
 import type { AspectPreviewPluginOptions } from './types.js'
+import { validateAspectRatios } from './validate.js'
 
 const FIELD_COMPONENT = 'payload-plugin-aspect-preview/client#FocalPointEditor'
 const UPLOAD_COMPONENT = 'payload-plugin-aspect-preview/client#CustomUpload'
@@ -35,6 +36,7 @@ export const aspectPreviewPlugin =
   (options: AspectPreviewPluginOptions): Plugin =>
   (config: Config): Config => {
     const aspectRatios = options.aspectRatios ?? DEFAULT_ASPECT_RATIOS
+    validateAspectRatios(aspectRatios)
     const enabled = new Set(options.collections)
 
     // Payload strips `collection.custom` from the client config, so the editor

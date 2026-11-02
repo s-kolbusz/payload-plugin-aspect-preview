@@ -6,7 +6,8 @@ import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
-import { aspectPreviewPlugin } from '../dist/index.js'
+import type { AspectRatioConfig } from '../dist/index.js'
+import { aspectPreviewPlugin, DEFAULT_ASPECT_RATIOS } from '../dist/index.js'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -47,6 +48,25 @@ export default buildConfig({
   plugins: [
     aspectPreviewPlugin({
       collections: ['media'],
+      // The defaults, with `overlays` on a few ratios to exercise the covered-area bands.
+      aspectRatios: DEFAULT_ASPECT_RATIOS.map((ratio): AspectRatioConfig => {
+        if (ratio.ratio === '4:3') {
+          return {
+            ...ratio,
+            overlays: [
+              { label: 'Chips', edge: 'top', min: 0.12 },
+              { label: 'Title + price', edge: 'bottom', min: 0.22, max: 0.4 },
+            ],
+          }
+        }
+        if (ratio.ratio === '16:9') {
+          return { ...ratio, overlays: [{ label: 'Headline', edge: 'left', min: 0.35, max: 0.5 }] }
+        }
+        if (ratio.ratio === '9:16') {
+          return { ...ratio, overlays: [{ label: 'Caption', edge: 'bottom', min: 0.15, max: 0.3 }] }
+        }
+        return ratio
+      }),
     }),
   ],
   db: mongooseAdapter({

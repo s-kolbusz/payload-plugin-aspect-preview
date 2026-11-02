@@ -1,6 +1,7 @@
 export type {
   AspectPreviewPluginOptions,
   AspectRatioConfig,
+  AspectRatioOverlay,
   CropConfig,
   FocalPointState,
   UploadEditsState,

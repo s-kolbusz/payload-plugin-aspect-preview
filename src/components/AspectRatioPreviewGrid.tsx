@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 
-import type { AspectRatioConfig, CropConfig } from '../types'
+import type { AspectRatioConfig, AspectRatioOverlay, CropConfig } from '../types'
 
 interface AspectRatioPreviewGridProps {
   url: string
@@ -119,6 +119,29 @@ function computeCroppedBackgroundStyle(
   }
 }
 
+// A covered area is pinned to the frame's edge, not the image: the frontend's
+// text stays put while the focal point and crop move the photo underneath it.
+// `max` sizes the whole zone; `min` is the solid part next to the edge, and the
+// rest of the zone (min → max) is drawn hatched.
+const OverlayZone: React.FC<{ overlay: AspectRatioOverlay }> = ({ overlay }) => {
+  const max = Math.max(overlay.max ?? overlay.min, overlay.min)
+  // Validation rejects an overlay that covers nothing; don't leave a stray label if one slips by.
+  if (!(max > 0)) return null
+  const solidShare = (overlay.min / max) * 100
+
+  return (
+    <div
+      className={`focal-preview__zone focal-preview__zone--${overlay.edge}`}
+      style={{ '--apv-zone-size': `${max * 100}%`, '--apv-zone-solid': `${solidShare}%` } as React.CSSProperties}
+      data-testid="aspect-preview-overlay"
+    >
+      {overlay.min > 0 && <div className="focal-preview__zone-solid" />}
+      {max > overlay.min && <div className="focal-preview__zone-range" />}
+      <span className="focal-preview__zone-label">{overlay.label}</span>
+    </div>
+  )
+}
+
 const PreviewCard: React.FC<{
   ratio: AspectRatioConfig
   url: string
@@ -191,6 +214,13 @@ const PreviewCard: React.FC<{
         role="img"
         aria-label={`Preview for ${ratio.name}`}
       >
+        {ratio.overlays && ratio.overlays.length > 0 && (
+          <div className="focal-preview__zones" aria-hidden="true">
+            {ratio.overlays.map((overlay, i) => (
+              <OverlayZone key={`${overlay.edge}-${i}`} overlay={overlay} />
+            ))}
+          </div>
+        )}
         <div className="focal-preview__card-overlay" />
         <div className="focal-preview__card-crosshair" />
       </div>
