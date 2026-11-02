@@ -1,6 +1,6 @@
 {
   "name": "payload-plugin-aspect-preview",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Payload CMS plugin for image cropping, focal point editing, and live responsive image previews across hero, card, and mobile aspect ratios.",
   "keywords": [
     "payload",

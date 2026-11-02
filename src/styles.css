@@ -98,6 +98,121 @@
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
   z-index: 1;
 }
+/* Covered areas (`overlays`): pinned to the frame, under the crosshair, never catching the
+   pointer. Drawn in the theme's inverse colour — dark bands on a light admin, light on a
+   dark one — so they read as UI laid over the photo rather than part of it. */
+.focal-preview__zones {
+  --apv-zone-ink: var(--apv-bg-inverse);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  line-height: normal;
+}
+.focal-preview__zone {
+  position: absolute;
+  display: flex;
+}
+.focal-preview__zone--top {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--apv-zone-size);
+  flex-direction: column;
+}
+.focal-preview__zone--bottom {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--apv-zone-size);
+  flex-direction: column-reverse;
+}
+.focal-preview__zone--left {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--apv-zone-size);
+  flex-direction: row;
+}
+.focal-preview__zone--right {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: var(--apv-zone-size);
+  flex-direction: row-reverse;
+}
+/* Fills follow the theme; the edges are drawn like the crosshair — white with a dark halo —
+   so a band's limit reads on any photo, dark sea or bright sky, in either theme. */
+.focal-preview__zone-solid,
+.focal-preview__zone-range {
+  border: 0 solid rgba(255, 255, 255, 0.9);
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.6));
+}
+.focal-preview__zone-solid {
+  flex: 0 0 var(--apv-zone-solid);
+  background: color-mix(in srgb, var(--apv-zone-ink) 55%, transparent);
+}
+.focal-preview__zone-range {
+  flex: 1 1 auto;
+  border-style: dashed;
+  background: repeating-linear-gradient(
+    -45deg,
+    color-mix(in srgb, var(--apv-zone-ink) 40%, transparent) 0 3px,
+    color-mix(in srgb, var(--apv-zone-ink) 12%, transparent) 3px 7px
+  );
+}
+.focal-preview__zone--top > div {
+  border-bottom-width: 1px;
+}
+.focal-preview__zone--bottom > div {
+  border-top-width: 1px;
+}
+.focal-preview__zone--left > div {
+  border-right-width: 1px;
+}
+.focal-preview__zone--right > div {
+  border-left-width: 1px;
+}
+.focal-preview__zone-label {
+  position: absolute;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 1px 5px;
+  border-radius: var(--apv-radius-s);
+  background: color-mix(in srgb, var(--apv-zone-ink) 85%, transparent);
+  color: var(--apv-on-inverse);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+/* The label hugs the frame edge and may run past a band thinner than itself: legible beats
+   contained. It is only clipped along the band, where a long label would cross the photo. */
+.focal-preview__zone--top .focal-preview__zone-label,
+.focal-preview__zone--bottom .focal-preview__zone-label {
+  left: 4px;
+  max-width: calc(100% - 8px);
+}
+.focal-preview__zone--top .focal-preview__zone-label {
+  top: 4px;
+}
+.focal-preview__zone--bottom .focal-preview__zone-label {
+  bottom: 4px;
+}
+.focal-preview__zone--left .focal-preview__zone-label,
+.focal-preview__zone--right .focal-preview__zone-label {
+  top: 4px;
+  max-height: calc(100% - 8px);
+  writing-mode: vertical-rl;
+  padding: 5px 1px;
+}
+.focal-preview__zone--left .focal-preview__zone-label {
+  left: 4px;
+}
+.focal-preview__zone--right .focal-preview__zone-label {
+  right: 4px;
+}
+
 .focal-preview__card-crosshair {
   position: absolute;
   left: 50%;

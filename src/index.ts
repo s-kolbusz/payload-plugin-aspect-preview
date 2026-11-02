@@ -3,6 +3,7 @@ export { DEFAULT_ASPECT_RATIOS } from './defaults.js'
 export type {
   AspectPreviewPluginOptions,
   AspectRatioConfig,
+  AspectRatioOverlay,
   CropConfig,
   FocalPointState,
   UploadEditsState,

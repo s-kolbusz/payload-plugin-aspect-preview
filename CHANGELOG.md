@@ -4,6 +4,24 @@ All notable changes to this project are documented in this file. The format is
 based on [Keep a Changelog](https://keepachangelog.com/), and this project
 adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.3.0] - 2026-11-02
+
+### Added
+
+- **`overlays` on `AspectRatioConfig`: show where your site puts text over the
+  image.** Each overlay is `{ label, edge, min, max? }` — the frame edge a
+  component covers (`'top' | 'bottom' | 'left' | 'right'`), the fraction of the
+  frame's height or width it always covers (`min`, drawn solid) and, optionally,
+  the fraction it covers at worst (`max`, e.g. a wrapping title, drawn hatched up
+  to a dashed line). A ratio can have several. The bands are pinned to the
+  preview frame, so the image moves under them as the focal point or crop
+  changes, exactly as on the site; they ignore the pointer and follow Payload's
+  light and dark themes. Ratios without `overlays` render as before.
+- The plugin validates `overlays` when it is applied and throws an error naming
+  the ratio and the overlay for an unknown `edge`, a fraction outside 0–1, or a
+  `max` below `min`.
+- `AspectRatioOverlay` type, exported from the package root and `/types`.
+
 ## [0.2.3] - 2026-09-28
 
 ### Fixed
