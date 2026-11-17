@@ -48,6 +48,9 @@ importers:
       eslint-plugin-react-hooks:
         specifier: ^7.1.1
         version: 7.1.1(eslint@10.7.0)
+      happy-dom:
+        specifier: 20.10.6
+        version: 20.10.6
       next:
         specifier: ^16.0.0
         version: 16.2.10(@babel/core@7.29.7)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(sass@1.77.4)

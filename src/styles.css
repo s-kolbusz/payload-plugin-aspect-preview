@@ -8,27 +8,32 @@
  * Not the other way round: v4's names (`--color-border`, `--color-text`, …) are Tailwind's
  * too, so on a v3 admin that also loads a Tailwind site theme they are already set — to the
  * site's colours.
+ *
+ * Outside any Payload admin (the `/playground` entry on a plain page) neither set exists, so
+ * each chain ends in a light, neutral literal close to v3's light theme. A host page themes
+ * the editor by setting the `--apv-*` variables on a class it passes in (`className`) or on
+ * an ancestor selector more specific than `.focal-editor`, e.g. `.demo .focal-editor`.
  */
 .focal-preview,
 .focal-editor {
-  --apv-bg: var(--theme-elevation-0, var(--color-bg));
-  --apv-bg-subtle: var(--theme-elevation-50, var(--color-bg-secondary));
-  --apv-bg-muted: var(--theme-elevation-100, var(--color-bg-tertiary));
-  --apv-bg-inverse: var(--theme-elevation-900, var(--color-bg-inverse));
-  --apv-on-inverse: var(--theme-elevation-0, var(--color-text-oninverse));
-  --apv-border: var(--theme-elevation-100, var(--color-border));
-  --apv-border-strong: var(--theme-elevation-150, var(--color-border-strong));
-  --apv-border-hover: var(--theme-elevation-200, var(--color-border-strong));
-  --apv-border-focus: var(--theme-elevation-400, var(--color-border-selected));
-  --apv-text: var(--theme-text, var(--color-text));
-  --apv-text-strong: var(--theme-elevation-800, var(--color-text));
-  --apv-text-soft: var(--theme-elevation-600, var(--color-text-secondary));
-  --apv-text-muted: var(--theme-elevation-500, var(--color-text-secondary));
-  --apv-text-disabled: var(--theme-elevation-400, var(--color-text-disabled));
+  --apv-bg: var(--theme-elevation-0, var(--color-bg, #ffffff));
+  --apv-bg-subtle: var(--theme-elevation-50, var(--color-bg-secondary, #f5f5f5));
+  --apv-bg-muted: var(--theme-elevation-100, var(--color-bg-tertiary, #ebebeb));
+  --apv-bg-inverse: var(--theme-elevation-900, var(--color-bg-inverse, #1a1a1a));
+  --apv-on-inverse: var(--theme-elevation-0, var(--color-text-oninverse, #ffffff));
+  --apv-border: var(--theme-elevation-100, var(--color-border, #ebebeb));
+  --apv-border-strong: var(--theme-elevation-150, var(--color-border-strong, #dddddd));
+  --apv-border-hover: var(--theme-elevation-200, var(--color-border-strong, #cccccc));
+  --apv-border-focus: var(--theme-elevation-400, var(--color-border-selected, #999999));
+  --apv-text: var(--theme-text, var(--color-text, #141414));
+  --apv-text-strong: var(--theme-elevation-800, var(--color-text, #333333));
+  --apv-text-soft: var(--theme-elevation-600, var(--color-text-secondary, #666666));
+  --apv-text-muted: var(--theme-elevation-500, var(--color-text-secondary, #808080));
+  --apv-text-disabled: var(--theme-elevation-400, var(--color-text-disabled, #999999));
   /* Payload has never defined `--border-radius-*`, which this file used to read, so every
      corner rendered square. v3's real names are `--style-radius-*`. */
-  --apv-radius-s: var(--style-radius-s, var(--radius-small));
-  --apv-radius-m: var(--style-radius-m, var(--radius-medium));
+  --apv-radius-s: var(--style-radius-s, var(--radius-small, 3px));
+  --apv-radius-m: var(--style-radius-m, var(--radius-medium, 4px));
 }
 
 .focal-preview__grid {
