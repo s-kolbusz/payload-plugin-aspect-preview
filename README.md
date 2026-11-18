@@ -155,9 +155,81 @@ aspectPreviewPlugin({ collections: ['media', 'avatars'] })
 aspectPreviewPlugin({ collections: ['media'], disabled: true })
 ```
 
+## Use the editor without Payload
+
+The same editor ships as a plain React component under `payload-plugin-aspect-preview/playground`. Nothing reachable from that entry imports `payload` or `@payloadcms/*`, so it runs on any React 19 page: a demo, a docs site, a tool of your own. Payload and `@payloadcms/ui` are optional peer dependencies, so installing the package without them is fine.
+
+```bash
+pnpm add payload-plugin-aspect-preview
+```
+
+It is a client component. In the Next.js App Router, render it from a file that starts with `'use client'`:
+
+```tsx
+'use client'
+
+import { useState } from 'react'
+import {
+  AspectPreviewEditor,
+  type AspectPreviewValue,
+} from 'payload-plugin-aspect-preview/playground'
+
+export function ImageDemo() {
+  const [src, setSrc] = useState('/sample.jpg')
+  const [value, setValue] = useState<AspectPreviewValue>({ focal: { x: 50, y: 50 } })
+
+  return (
+    <>
+      {/* A picked file stays in the browser: it is shown through a blob: URL. */}
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => {
+          const file = e.target.files?.[0]
+          if (file) setSrc(URL.createObjectURL(file))
+        }}
+      />
+      <AspectPreviewEditor src={src} value={value} onChange={setValue} />
+    </>
+  )
+}
+```
+
+Revoke old `blob:` URLs with `URL.revokeObjectURL` once you replace them. The component imports its own stylesheets (the editor's and `react-image-crop`'s), which the App Router accepts from any component.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `src` | `string` | — | The image: any URL the browser can load, `blob:` URLs included. Without it the editor shows `emptyMessage`. |
+| `aspectRatios` | `AspectRatioConfig[]` | `DEFAULT_ASPECT_RATIOS` | Ratios in the preview grid, `overlays` included. |
+| `value` | `AspectPreviewValue` | — | Controlled value: `{ crop?, focal }`. |
+| `defaultValue` | `AspectPreviewValue` | no crop, focal at the centre | Starting value when you leave out `value`. |
+| `onChange` | `(value, { reason }) => void` | — | The whole next value. `reason` is `'user'`, or `'normalize'` when the editor only converted a legacy pixel crop to percent. |
+| `alt` | `string` | `'Edit'` | Alt text for the editable image. |
+| `className`, `style` | | — | Added to the root element (`.focal-editor`). |
+| `emptyMessage` | `ReactNode` | `'Upload an image…'` | Shown while `src` is empty. |
+
+`value.crop` is a percent rectangle over the whole image, or `undefined` for no crop. `value.focal` is a 0–100 position **inside the crop** (inside the whole image when there is none), the same space Payload stores `focalX` and `focalY` in. To place something on the whole image, convert it with `toFullImageFocal(value.focal, value.crop)` (pass `{ x: 0, y: 0, width: 100, height: 100 }` when there is no crop). The entry also exports `AspectRatioPreviewGrid`, `DEFAULT_ASPECT_RATIOS`, `toCropRelativeFocal`, `isRealCrop` and the types.
+
+**Theming.** Outside the Payload admin the editor falls back to a light, neutral palette. Override any `--apv-*` variable on your own class to match your site:
+
+```css
+.my-demo.focal-editor {
+  --apv-bg: #0f1115;
+  --apv-bg-subtle: #171a21;
+  --apv-bg-muted: #1f232c;
+  --apv-border: #2a2f3a;
+  --apv-text: #e8eaee;
+  --apv-text-muted: #9aa1ad;
+  --apv-bg-inverse: #e8eaee;
+  --apv-on-inverse: #0f1115;
+}
+```
+
+The full list is at the top of [`src/styles.css`](src/styles.css). The root also has `margin-top: 20px`, which you can reset the same way.
+
 ## How it works
 
-The plugin replaces the configured collections' upload UI with `CustomUpload` and adds an `aspectPreview` UI field rendered by `FocalPointEditor`. Crop and focal point edits flow through Payload's upload-edits context. Payload applies the crop on save and persists focal coordinates as `focalX` and `focalY`.
+The plugin replaces the configured collections' upload UI with `CustomUpload` and adds an `aspectPreview` UI field rendered by `FocalPointEditor`, a thin Payload wrapper around `AspectPreviewEditor`. Crop and focal point edits flow through Payload's upload-edits context. Payload applies the crop on save and persists focal coordinates as `focalX` and `focalY`.
 
 The preview grid uses cover sizing equivalent to `object-fit: cover` and `object-position` based on the focal point. When a crop is active, the grid previews that crop region with the focal point measured relative to it.
 
@@ -185,7 +257,7 @@ They model cover sizing with focal positioning at your configured aspect ratios.
 
 ## Requirements and compatibility
 
-- Payload and `@payloadcms/ui` `^3.85.0`
+- Payload and `@payloadcms/ui` `^3.85.0` (not needed for `/playground`)
 - React `^19.0.0`
 - Node.js `>=20.9.0`
 

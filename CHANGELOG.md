@@ -4,6 +4,36 @@ All notable changes to this project are documented in this file. The format is
 based on [Keep a Changelog](https://keepachangelog.com/), and this project
 adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.4.0] - 2026-11-17
+
+### Added
+
+- **`payload-plugin-aspect-preview/playground`: the editor without Payload.**
+  `AspectPreviewEditor` is the plugin's crop, focal-point and preview-grid
+  editor as a plain React component, controlled (`value` + `onChange`) or
+  uncontrolled (`defaultValue`). It takes any image URL, `blob:` URLs from a
+  visitor's own file included, and your `aspectRatios` with their `overlays`.
+  Nothing reachable from the entry imports `payload` or `@payloadcms/*`; a test
+  walks the import graph of both the source and the built `dist` and fails if
+  one does. The entry also exports `AspectRatioPreviewGrid`,
+  `DEFAULT_ASPECT_RATIOS`, `toCropRelativeFocal`, `toFullImageFocal`,
+  `isRealCrop` and the types. See "Use the editor without Payload" in the README.
+- The stylesheet ends every colour and radius in a light, neutral fallback, so
+  the editor is readable on a page without Payload's theme. Inside the admin
+  nothing changes: Payload's variables still come first. Host pages can set
+  the `--apv-*` variables through `className` or `style`.
+
+### Changed
+
+- `FocalPointEditor` is now a thin wrapper that connects Payload's document,
+  form and upload-edits context to `AspectPreviewEditor`. What editors see and
+  what gets saved are unchanged.
+- `payload` and `@payloadcms/ui` are marked as optional peer dependencies, so a
+  site that uses only `/playground` doesn't get Payload installed or a peer
+  warning. Plugin users have both already.
+- The editor's input ids come from `useId`, so two editors on one page no
+  longer share ids.
+
 ## [0.3.0] - 2026-11-02
 
 ### Added
